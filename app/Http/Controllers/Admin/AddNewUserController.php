@@ -61,9 +61,15 @@ class AddNewUserController extends Controller
             $users->where('users.status', $request->status);
         }
 
+        $users->select('users.id', 'users.name', 'users.email', 'users.role', 'statuses.status_name');
+
         $users = $users->get();
 
-        return (String) view('/admin/elements/ajax_users_table', ['users' => $users]);
+        return response()->json([
+            'titles' => ['ID', 'Name', 'Email','Role', 'Status','Actions'],
+            'data' => $users,
+            'status' => !$users->isEmpty()
+        ]);
     }
 
     public function addUser()

@@ -454,15 +454,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset("/vendor/bootstrap-datepicker/js/bootstrap-datetimepicker.min.js") }}"></script>
 
 <script>
+    function wrapTag(res, tag, className){
+        if(className) {
+            return "<" + tag + " class='" + className + "'>" + res + "</" + tag + ">";
+        }
+        return "<" + tag + ">" + res + "</" + tag + ">";
+    }
+
+    function getStatus(statusName){
+        var key = statusName.replace(' ', '').toLowerCase();
+
+        var statuses = {
+            notapproved :'label-warning',
+            pending :'label-warning',
+            inprogress :'label-warning',
+            rejected :'label-danger',
+            approved :'label-success'
+        };
+        return wrapTag(statusName, 'span', 'label ' + statuses[key]);
+    }
+
+    function getCrudLinks(userId){
+        //var
+    }
+
+
+    function createAdminTable(data) {
+
+        if(data.status){
+
+            var thead = '';
+            var tbody = '';
+            $.each(data.titles, function (i, item) {
+                thead += wrapTag(item,'th');
+            });
+
+            $.each(data.data, function (i, item) {
+                var td = '';
+               $.each(item,function(k,v){
+
+                   if(k == 'status_name'){
+                       v = getStatus(v);
+                   }
+
+                   td += wrapTag(v,'td');
+               });
+                tbody += wrapTag(td,'tr');
+            });
+
+            var tableHtml = wrapTag(wrapTag(wrapTag(thead,'tr'),'thead') + wrapTag(tbody,'tbody'),'table', 'table table-bordered');
+            $('.box-body').html(tableHtml);
+
+        }
+        else
+            $('.box-body').html(wrapTag('Empty', 'div'));
+    }
 
     $(function(){
         $('[data-toggle="tab"]').click(function(e) {
             var $this = $(this),
                 loadurl = $this.attr('href'),
-                targ = $('#table');
+                url     = $this.parent('li').parent('ul').attr('data-ajaxurl');
 
-            $.get('/ajaxGetUsers/' + loadurl, function(data) {
-                $(targ).html(data);
+            $.get(url + '/' + loadurl, function(data) {
+                createAdminTable(data);
             });
 
             $this.tab('show');
