@@ -9,14 +9,16 @@
                 </div>
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#activity" data-toggle="tab" aria-expanded="true">All</a></li>
-                        <li class=""><a href="#timeline" data-toggle="tab" aria-expanded="false">Active</a></li>
-                        <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Inactive</a></li>
-                        <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Not Approved</a></li>
+                        <li class="active"><a href="0" data-toggle="tab" aria-expanded="true">All</a></li>
+                        <li class=""><a href="2" data-toggle="tab" aria-expanded="false">Pending</a></li>
+                        <li class=""><a href="3" data-toggle="tab" aria-expanded="false">In progress</a></li>
+                        <li class=""><a href="4" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+                        <li class=""><a href="5" data-toggle="tab" aria-expanded="false">Approved</a></li>
+                        <li class=""><a href="1" data-toggle="tab" aria-expanded="false">Not Approved</a></li>
                     </ul>
                 </div>
                 <!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body" id="table">
 
                     <table class="table table-bordered">
                         <tbody><tr>

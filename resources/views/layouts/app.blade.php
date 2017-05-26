@@ -453,7 +453,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset("/js/bootstrap-datepaginator.js") }}"></script>
 <script src="{{ asset("/vendor/bootstrap-datepicker/js/bootstrap-datetimepicker.min.js") }}"></script>
 
+<script>
 
+    $(function(){
+        $('[data-toggle="tab"]').click(function(e) {
+            var $this = $(this),
+                loadurl = $this.attr('href'),
+                targ = $('#table');
+
+            $.get('/ajaxGetUsers/' + loadurl, function(data) {
+                $(targ).html(data);
+            });
+
+            $this.tab('show');
+            return false;
+        });
+    });
+
+</script>
 
 </body>
 </html>

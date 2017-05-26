@@ -19,32 +19,51 @@ class AddNewUserController extends Controller
         $this->middleware('auth');
     }
 
+    private function getUsers(){
+        $users = DB::table('users')
+            ->join('statuses', 'users.status', '=', 'statuses.id')
+            ->join('roles', 'users.role', '=', 'roles.id');
+
+
+        if(Auth::user()->hasRole(1)){
+
+            $users->where([
+                ['users.company_id', Auth::user()->company_id],
+                ['users.id', '!=', Auth::user()->id]
+            ]);
+        }
+        else{
+            $users->where('users.user_parent', Auth::user()->id);
+        }
+        $users->select('users.*', 'statuses.status_name as statusName', 'roles.role_name as roleName');
+
+        $users->orderBy('id', 'desc');
+
+        return $users;
+    }
+
     public function showUsers(){
 
         if(Auth::user()->hasRole(1) || Auth::user()->hasRole(2)) {
 
-            $users = DB::table('users')
-                ->join('statuses', 'users.status', '=', 'statuses.id')
-                ->join('roles', 'users.role', '=', 'roles.id');
-
-
-            if(Auth::user()->hasRole(1)){
-
-                $users->where([
-                    ['users.company_id', Auth::user()->company_id],
-                    ['users.id', '!=', Auth::user()->id]
-                ]);
-            }
-            else{
-                $users->where('users.user_parent', Auth::user()->id);
-            }
-            $users->select('users.*', 'statuses.status_name as statusName', 'roles.role_name as roleName');
-
-            $users->orderBy('id', 'desc');
+            $users = $this->getUsers();
 
             return view('/admin/showUsers', ['users' => $users->get()]);
         }
         return view('404');
+    }
+
+    public function ajaxGetUsers(Request $request){
+
+        $users = $this->getUsers();
+
+        if($request->status != 0){
+            $users->where('users.status', $request->status);
+        }
+
+        $users = $users->get();
+
+        return (String) view('/admin/elements/ajax_users_table', ['users' => $users]);
     }
 
     public function addUser()
