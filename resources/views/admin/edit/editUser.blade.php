@@ -68,31 +68,19 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Department</label>
-                                    <select name="uDepartment" class="form-control">
-                                        @foreach($departments as $department)
-                                            <option value="{{$department->department_id}}">{{$department->department_name}}</option>
-                                        @endforeach
-                                    </select>
+                                    {{ Form::select('uDepartment', $departments, $userDepartment, ['class' => 'form-control'])  }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Role</label>
-                                    <select name="uRole" class="form-control">
-                                        @foreach($roles as $role)
-                                            <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                        @endforeach
-                                    </select>
+                                    {{ Form::select('uRole', $roles, $userInfo->role, ['class' => 'form-control']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <select name="uStatus" class="form-control">
-                                        @foreach($status as $user_status)
-                                            <option value="{{$user_status->id}}">{{$user_status->status_name}}</option>
-                                        @endforeach
-                                    </select>
+                                    {{ Form::select('uStatus', $status, $userInfo->status, ['class' => 'form-control']) }}
                                 </div>
                             </div>
                         </div>

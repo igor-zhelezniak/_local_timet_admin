@@ -205,19 +205,24 @@ class AddNewUserController extends Controller
             $departments = DB::table('departments')
                 ->join('departments_users', 'departments_users.department_id', '=', 'departments.id')
                 ->where('departments_users.user_id', Auth::user()->id)
-                ->get();
+                ->pluck('departments.department_name', 'departments.id');
 
-            $roles = DB::table('roles')->get();
-            $status = DB::table('statuses')->get();
+            $userDepartment = DB::table('departments_users')
+                ->where('departments_users.user_id', '=',  $userInfo->id)->get();
 
+            $roles = DB::table('roles')->pluck('role_name', 'id');
+
+            $status = DB::table('statuses')->pluck('status_name', 'id');
 
             return view('admin/edit/editUser', [
                 'user_id' => $request->id,
                 'user_name' => $userInfo->name,
                 'user_email' => $userInfo->email,
                 'departments' => $departments,
+                'userInfo' => $userInfo,
                 'roles' => $roles,
                 'status' => $status,
+                'userDepartment' => $userDepartment
             ]);
         }
         return view('404');
