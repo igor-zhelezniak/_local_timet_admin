@@ -19,20 +19,51 @@ class CustomerController extends Controller
         $this->middleware('auth');
     }
 
+    public function getClients(){
+        $user_id = Auth::user()->id;
+
+        $clients = DB::table('clients')
+            ->join('clients_users', 'clients.id', '=', 'clients_users.client_id')
+            ->join('statuses', 'clients.status', '=', 'statuses.id')
+            ->where('clients_users.user_id', $user_id);
+        $clients->select('clients.id', 'clients.code', 'clients.name','statuses.status_name');
+        return $clients;
+    }
+
     public function showClients(){
 
         if(Auth::user()->hasRole(1)) {
-            $user_id = Auth::user()->id;
 
-            $clients = DB::table('clients')
-                ->join('clients_users', 'clients.id', '=', 'clients_users.client_id')
-                ->join('statuses', 'clients.status', '=', 'statuses.id')
-                ->where('clients_users.user_id', $user_id);
-            $clients->select('clients.id', 'clients.code', 'clients.name','statuses.status_name');
+            $clients = $this->getClients();
 
             return view('/admin/showClients', ['clients' => $clients->get()]);
         }
         return view('404');
+    }
+
+    public function ajaxGetClients(Request $request){
+
+        $clients = $this->getClients();
+
+        if($request->status != 0){
+            $clients->where('clients.status', $request->status);
+        }
+
+        $clients->select('clients.id', 'clients.code', 'clients.name', 'statuses.status_name');
+
+        $clients = $clients->get();
+
+        $links = [
+            'edit' => '/admin/editClient/'/*,
+            'delete' => '/admin/deleteClient/'*/
+        ];
+
+        return response()->json([
+            'titles' => ['ID', 'Code', 'Name', 'Status','Actions'],
+            'data' => $clients,
+            'links' => $links,
+            'status' => !$clients->isEmpty()
+        ]);
     }
 
     public function addClient(){

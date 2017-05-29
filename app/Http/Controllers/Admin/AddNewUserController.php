@@ -65,9 +65,15 @@ class AddNewUserController extends Controller
 
         $users = $users->get();
 
+        $links = [
+            'edit' => '/admin/editUser/'/*,
+            'delete' => '/admin/deleteUser/'*/
+        ];
+
         return response()->json([
             'titles' => ['ID', 'Name', 'Email','Role', 'Status','Actions'],
             'data' => $users,
+            'links' => $links,
             'status' => !$users->isEmpty()
         ]);
     }

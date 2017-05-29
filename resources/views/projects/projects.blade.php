@@ -7,6 +7,16 @@
 			<div class="box-header with-border">
 				<h3 class="box-title">List of Projects</h3>
 			</div>
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs" data-ajaxurl="/ajaxGetProjects">
+					<li class="active"><a href="0" data-toggle="tab" aria-expanded="true">All</a></li>
+					<li class=""><a href="2" data-toggle="tab" aria-expanded="false">Pending</a></li>
+					<li class=""><a href="3" data-toggle="tab" aria-expanded="false">In progress</a></li>
+					<li class=""><a href="4" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+					<li class=""><a href="5" data-toggle="tab" aria-expanded="false">Approved</a></li>
+					<li class=""><a href="1" data-toggle="tab" aria-expanded="false">Not Approved</a></li>
+				</ul>
+			</div>
 			<!-- /.box-header -->
 			<div class="box-body">
 				<table class="table table-bordered">
@@ -33,7 +43,9 @@
 							<td>{{$project->project_budget_time}}</td>
 							<td>{{$project->project_budget_money}}</td>
 							<td>{{$project->uName}}</td>
-							<td>{{$project->status_name}}</td>
+							<td>
+								<span class="label {{Statuses::getClassName($project->status_name)}}">{{$project->status_name}}</span>
+							</td>
 							<td>
 								<a href="/projects/editProject/{{$project->project_id}}"><span class="label label-warning"><i class="icon fa fa-edit"></i> Edit</span></a>
 							</td>

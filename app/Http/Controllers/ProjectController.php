@@ -22,19 +22,24 @@ class ProjectController extends AuthorizationController
 		parent::__construct();
 	}
 
+	public function getProjects(){
+        $projects = DB::table('projects')
+            ->join('projects_users', 'projects.id', '=', 'projects_users.project_id' )
+            ->join('projects_status', 'projects.project_status', '=', 'projects_status.id')
+            ->leftJoin('users', 'projects.project_lead', '=', 'users.id')
+            ->join('clients as cl', 'projects.project_customer', '=', 'cl.id');
+
+        $projects->where([
+            ['projects.company_id', Auth::user()->company_id],
+        ]);
+        return $projects;
+    }
+
 	public function showProjects(){
 
         if(Auth::user()->hasRole(1) || Auth::user()->hasRole(2)){
 
-            $projects = DB::table('projects')
-                ->join('projects_users', 'projects.id', '=', 'projects_users.project_id' )
-                ->join('projects_status', 'projects.project_status', '=', 'projects_status.id')
-                ->leftJoin('users', 'projects.project_lead', '=', 'users.id')
-                ->join('clients as cl', 'projects.project_customer', '=', 'cl.id');
-
-            $projects->where([
-                ['projects.company_id', Auth::user()->company_id],
-            ]);
+            $projects = $this->getProjects();
 
             /*На будущее*/
 			if(Auth::user()->hasRole(2)){
@@ -50,6 +55,32 @@ class ProjectController extends AuthorizationController
 		}
 		return view('404');
 	}
+
+    public function ajaxGetProjects(Request $request){
+
+        $projects = $this->getProjects();
+
+        if($request->status != 0){
+            $projects->where('projects.project_status', $request->status);
+        }
+
+        $projects->select('projects.id', 'projects.project_type', 'projects.project_name', 'projects.project_description', 'cl.name as clName',
+            'projects.project_budget_time', 'projects.project_budget_money', 'users.name as uName', 'status_name');
+
+        $projects = $projects->get();
+
+        $links = [
+            'edit' => '/admin/editProject/'/*,
+            'delete' => '/admin/deleteUser/'*/
+        ];
+
+        return response()->json([
+            'titles' => ['ID', 'Type', 'Name','Description', 'Customer','Budget In Time','Budget In Money', 'Lead', 'Status','Actions'],
+            'data' => $projects,
+            'links' => $links,
+            'status' => !$projects->isEmpty()
+        ]);
+    }
 	
 	public function addProject(){
 		if(Auth::user()->hasRole(1)){

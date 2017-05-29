@@ -78,3 +78,5 @@ Route::post('updateProfile', 'Admin\AddNewUserController@updateProfile');
 Route::post('/uploadUserPhoto', 'Admin\AddNewUserController@uploadUserPhoto');
 
 Route::get('/ajaxGetUsers/{status}', 'Admin\AddNewUserController@ajaxGetUsers');
+Route::get('/ajaxGetClients/{status}', 'Admin\CustomerController@ajaxGetClients');
+Route::get('/ajaxGetProjects/{status}', 'ProjectController@ajaxGetProjects');

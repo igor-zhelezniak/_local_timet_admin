@@ -18,7 +18,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs" data-ajaxurl="/ajaxGetClients">
                         <li class="active"><a href="0" data-toggle="tab" aria-expanded="true">All</a></li>
                         <li class=""><a href="2" data-toggle="tab" aria-expanded="false">Pending</a></li>
                         <li class=""><a href="3" data-toggle="tab" aria-expanded="false">In progress</a></li>

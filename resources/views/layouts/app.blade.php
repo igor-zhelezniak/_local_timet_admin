@@ -461,21 +461,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
         return "<" + tag + ">" + res + "</" + tag + ">";
     }
 
+    var statuses = {
+        notapproved :'label-warning',
+        pending :'label-warning',
+        inprogress :'label-warning',
+        rejected :'label-danger',
+        approved :'label-success'
+    };
+
     function getStatus(statusName){
         var key = statusName.replace(' ', '').toLowerCase();
 
-        var statuses = {
-            notapproved :'label-warning',
-            pending :'label-warning',
-            inprogress :'label-warning',
-            rejected :'label-danger',
-            approved :'label-success'
-        };
         return wrapTag(statusName, 'span', 'label ' + statuses[key]);
     }
 
-    function getCrudLinks(userId){
-        //var
+    function getCrudLinks(userId, links){
+        return '<a href="' + links.edit + userId + '"><span class="label label-warning"><i class="icon fa fa-close"></i> Edit</span></a>'
     }
 
 
@@ -494,10 +495,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                $.each(item,function(k,v){
 
                    if(k == 'status_name'){
+
                        v = getStatus(v);
+                       td += wrapTag(v,'td');
+
+                       td += wrapTag(getCrudLinks(item.id,data.links),'td');
+
+                   }
+                   else {
+                       td += wrapTag(v,'td');
                    }
 
-                   td += wrapTag(v,'td');
                });
                 tbody += wrapTag(td,'tr');
             });
