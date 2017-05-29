@@ -107,6 +107,10 @@ class ReportController extends AuthorizationController
             $result->where('timesheet.category_id', $request->categoriesName);
         }
 
+        if(!empty($request->customerName)) {
+            $result->where('clients.id', $request->customerName);
+        }
+
         $result->whereBetween('timesheet.logged_date', array($request->dateFrom, $request->dateTo));
 
         $result->select('timesheet.*', 'clients.name as clientName', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName');

@@ -70,8 +70,8 @@ class ProjectController extends AuthorizationController
         $projects = $projects->get();
 
         $links = [
-            'edit' => '/admin/editProject/'/*,
-            'delete' => '/admin/deleteUser/'*/
+            'edit' => '/projects/editProject/'/*,
+            'delete' => '/projects/deleteUser/'*/
         ];
 
         return response()->json([

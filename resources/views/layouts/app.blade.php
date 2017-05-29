@@ -455,6 +455,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script>
     function wrapTag(res, tag, className){
+        res == null ? res = '' : res = res;
         if(className) {
             return "<" + tag + " class='" + className + "'>" + res + "</" + tag + ">";
         }

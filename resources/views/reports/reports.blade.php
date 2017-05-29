@@ -129,6 +129,8 @@
                             });
 
                             $('#showReportsResult').click(function () {
+                                totalTimeCount.minute = 0;
+                                totalTimeCount.hours = 0;
                                 var selectReportForm = $('#selectReportForm').serialize();
                                 $.post('/showReportResult', selectReportForm, function (data) {
 
