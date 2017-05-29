@@ -70,6 +70,7 @@ Route::post('/showReportResult', 'Reports\ReportController@showReportResult');
 
 Route::get('/admin/settings', 'Admin\CompanyController@showSettings');
 Route::post('/admin/uploadLogo', 'Admin\CompanyController@uploadLogo');
+Route::post('/admin/updateCompany', 'Admin\CompanyController@updateCompany');
 
 Route::get('profile', 'Admin\AddNewUserController@profileInfo');
 Route::post('updateProfile', 'Admin\AddNewUserController@updateProfile');
@@ -81,4 +82,4 @@ Route::get('/ajaxGetUsers/{status}', 'Admin\AddNewUserController@ajaxGetUsers');
 Route::get('/ajaxGetClients/{status}', 'Admin\CustomerController@ajaxGetClients');
 Route::get('/ajaxGetProjects/{status}', 'ProjectController@ajaxGetProjects');
 
-Route::get('/ajaxGetCity/{code}', 'Auth\RegisterController@ajaxGetCity');
+Route::get('/ajaxGetCity/{code}', 'Admin\AddNewUserController@ajaxGetCity');

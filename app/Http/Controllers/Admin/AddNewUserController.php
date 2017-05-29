@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CompanyInfo;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -148,7 +149,47 @@ class AddNewUserController extends Controller
     }
 
     public function profileInfo(){
+        if(Auth::user()->hasRole(1)){
+            $timezones = DB::table('timezones')->pluck('timezone', 'id');
+            $company = CompanyInfo::findOrFail(Auth::user()->company_id);
+            $nominals = [
+                '1.15 = час и 15 минут',
+                '1:15 = час и 15 минут'
+            ];
+            $cities = $this->getCityByCountry($company->country);
+
+            return view('user/profile')
+                ->with('countries', $this->getCountriesList())
+                ->with('timezones', $timezones)
+                ->with('company', $company)
+                ->with('cities', $cities)
+                ->with('nominals', $nominals);
+        }
         return view('user/profile');
+    }
+
+    public function ajaxGetCity(\Illuminate\Http\Request $request){
+        echo json_encode($this->getCityByCountry($request->code));
+        exit;
+    }
+
+    protected function getCountriesList()
+    {
+        $arr = json_decode(file_get_contents('http://api.geonames.org/countryInfoJSON?username=honey123'), true);
+        $countries = false;
+        foreach ($arr['geonames'] as $key => $item){
+            $countries[$item['countryCode']] = $item['countryName'];
+        }
+        return $countries;
+    }
+
+    protected function getCityByCountry($countryCode = 'UA'){
+        $arr = json_decode(file_get_contents('http://api.geonames.org/searchJSON?country=' . $countryCode . '&username=honey123'), true);
+        $cities = false;
+        foreach ($arr['geonames'] as $key => $item){
+            $cities[$item['name']] = $item['name'];
+        }
+        return $cities;
     }
 
     public function updateProfile(Request $request){

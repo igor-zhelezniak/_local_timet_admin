@@ -115,6 +115,9 @@
                         <li class=""><a href="#timeline" data-toggle="tab" aria-expanded="false">Timeline</a></li>
                         --}}
                         <li class="active"><a href="#settings" data-toggle="tab" aria-expanded="true">Settings</a></li>
+                        @if(Auth::user()->hasRole(1))
+                            <li><a href="#company_settings" data-toggle="tab" aria-expanded="true">Company Settings</a></li>
+                        @endif
                     </ul>
                     <div class="tab-content">
                         {{--
@@ -394,6 +397,51 @@
                                         <input type="text" class="form-control" id="inputSkills" placeholder="Skills" name="inputSkills">
                                     </div>
                                 </div>
+
+                                {{--      <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }} has-feedback">
+                                        {{ Form::select('country',/* [null => 'Select Country'] + */$countries, null, ['class' => 'form-control']) }}
+                                    </div>
+
+                       {{--       <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }} has-feedback">
+                                        <select name="city" class="form-control">
+                                            <option disabled selected>Select City</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('adress') ? ' has-error' : '' }} has-feedback">
+                                        <input type="text" name="adress" class="form-control" placeholder="Adress" required>
+                                        <span class="glyphicon glyphicon-tent form-control-feedback"></span>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }} has-feedback">
+                                        {{ Form::select('timezone', ['Select Timezone'] + $timezones->all(), 0, ['class' => 'form-control']) }}
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }} has-feedback">
+                                        <input type="number" class="form-control" placeholder="Phone number" name="phone_number" required>
+                                        <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
+
+                                        @if ($errors->has('phone_number'))
+                                            <span class="help-block">
+                                                 <strong>{{ $errors->first('phone_number') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('companyLogo') ? ' has-error' : '' }} has-feedback">
+                                        <input type="file" class="form-control" name="companyLogo">
+
+                                        @if ($errors->has('companyLogo'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('phone_number') }}</strong>
+                                             </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('nominal') ? ' has-error' : '' }} has-feedback">
+                                        {{ Form::select('nominal', [null => 'Select Nominal'] + $nominals, null, ['class' => 'form-control']) }}
+                                    </div>--}}
+
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-danger">Submit</button>
@@ -402,7 +450,87 @@
                             </form>
                         </div>
 
+                        @if(Auth::user()->hasRole(1))
+                            <div class="tab-pane" id="company_settings">
 
+                                <form class="form-horizontal" id="company-settings" method="post" action="/admin/updateCompany" enctype="multipart/form-data">
+                                    {{csrf_field()}}
+
+                                    <div class="form-group">
+
+                                        <div class="col-sm-10">
+                                            @if($errors->any())
+                                                @foreach ($errors->all() as $error)
+                                                    <div class="alert alert-error">{{ $error }}</div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Country</label>
+
+                                        <div class="col-sm-10">
+                                            {{ Form::select('country', [null => 'Select Country'] + $countries, $company->country, ['class' => 'form-control']) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">City</label>
+
+                                        <div class="col-sm-10">
+                                            {{ Form::select('city', $cities, $company->city, ['class' => 'form-control']) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Adress</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="text" name="adress" value="{{ $company->adress }}" class="form-control" placeholder="Adress" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Timezone</label>
+
+                                        <div class="col-sm-10">
+                                            {{ Form::select('timezone', ['Select Timezone'] + $timezones->all(), $company->timezone, ['class' => 'form-control']) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Phone Number</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" value="{{ $company->phone_number }}" placeholder="Phone number" name="phone_number" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Company Logo</label>
+
+                                        <div class="col-sm-10">
+                                            <input type="file" class="form-control" value="{{ $company->company_logo }}" name="companyLogo">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="inputSkills" class="col-sm-2 control-label">Nominal</label>
+
+                                        <div class="col-sm-10">
+                                            {{ Form::select('nominal', [null => 'Select Nominal'] + $nominals, $company->nominal, ['class' => 'form-control']) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
                         <!-- /.tab-pane -->
                     </div>
                     <!-- /.tab-content -->
@@ -414,4 +542,22 @@
         <!-- /.row -->
 
     </section>
+    <script>
+
+        function ajaxGetCityByCountry() {
+            var el = $(this).find(':selected').val();
+            $('select[name=city]').empty();
+            $.get('/ajaxGetCity/' + el,function (data) {
+                var json = JSON.parse(data);
+                $.each(json, function(i, value) {
+                    $('select[name=city]').append($('<option>').text(value).attr('value', value));
+                });
+            })
+
+        }
+
+        $(function(){
+            $('select[name=country]').on('change', ajaxGetCityByCountry);
+        });
+    </script>
 @endsection

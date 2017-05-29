@@ -46,9 +46,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-
-       // $this->getCountriesList();
-        //$this->getCityByCountry();
     }
 
     /**
@@ -67,87 +64,32 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function showRegistrationForm()
-    {
-        $timezones = DB::table('timezones')->pluck('timezone', 'id');
-
-        $nominals = [
-            '1.15 = час и 15 минут',
-            '1:15 = час и 15 минут'
-        ];
-
-        return view('auth.register')
-            ->with('countries', $this->getCountriesList())
-            ->with('timezones', $timezones)
-            ->with('nominals', $nominals);
-    }
-
-    public function ajaxGetCity(\Illuminate\Http\Request $request){
-        echo json_encode($this->getCityByCountry($request->code));
-        exit;
-    }
-
-    protected function getCountriesList()
-    {
-        $arr = json_decode(file_get_contents('http://api.geonames.org/countryInfoJSON?username=honey123'), true);
-        $countries = false;
-        foreach ($arr['geonames'] as $key => $item){
-            $countries[$item['countryCode']] = $item['countryName'];
-        }
-        return $countries;
-    }
-
-    protected function getCityByCountry($countryCode = 'UA'){
-        $arr = json_decode(file_get_contents('http://api.geonames.org/searchJSON?country=' . $countryCode . '&username=honey123'), true);
-        $cities = false;
-        foreach ($arr['geonames'] as $key => $item){
-            $cities[$item['name']] = $item['name'];
-        }
-        return $cities;
-    }
-
     /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
      * @return User
      */
-    private function save_image($company, $file){
-        //dd($company);
-        $logoDirectoryPath = 'uploads/company/logo/' . $company->id . '/';
-        $companyLogoName = 'company-logo.';
-
-        $extension = Input::file('companyLogo')->getClientOriginalExtension();
-        //$image_name = time()."-".$file->getClientOriginalName();
-        $image_name = $companyLogoName.$extension;
-
-        $file->move($logoDirectoryPath, $image_name);
-        $image = Image::make(sprintf($logoDirectoryPath . '%s', $image_name))->resize(200, 50)->save();
-
-        DB::table('companies')
-            ->where('id', $company->id)
-            ->update(['companyLogo' => $image_name]);
-    }
-
     protected function create(array $data)
     {
-        //dd($data);
+        /*
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+			'role' => 1,
+			'status' => 1,
+        ]);
+        */
+
         $copmany = CompanyInfo::create([
             'name' => $data['company_name'],
             'code' => '',
             'url' => '',
             'description' =>'',
-            'country' => $data['country'],
-            'city' => $data['city'],
-            'adress' => $data['adress'],
-            'phone_number' => $data['phone_number'],
-            'timezone' => $data['timezone'],
-            'nominal' => $data['nominal']
+
         ]);
 
-        $file = Request::file('companyLogo');
-
-        $this->save_image($copmany, $file);
         $users = User::create([
             'name' => $data['name'],
             'email' => $data['email'],

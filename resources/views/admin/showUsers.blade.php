@@ -8,7 +8,7 @@
                     <h3 class="box-title">List of users</h3>
                 </div>
                 <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs" data-ajaxurl="/ajaxGetUsers">
+                    <ul class="nav nav-tabs ajax" data-ajaxurl="/ajaxGetUsers">
                         <li class="active"><a href="0" data-toggle="tab" aria-expanded="true">All</a></li>
                         <li class=""><a href="2" data-toggle="tab" aria-expanded="false">Pending</a></li>
                         <li class=""><a href="3" data-toggle="tab" aria-expanded="false">In progress</a></li>

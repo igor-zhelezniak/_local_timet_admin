@@ -519,7 +519,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     $(function(){
-        $('[data-toggle="tab"]').click(function(e) {
+        $('.ajax [data-toggle="tab"]').click(function(e) {
             var $this = $(this),
                 loadurl = $this.attr('href'),
                 url     = $this.parent('li').parent('ul').attr('data-ajaxurl');
