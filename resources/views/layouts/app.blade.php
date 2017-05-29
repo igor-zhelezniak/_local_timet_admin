@@ -522,6 +522,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $('.box-body').html(wrapTag('Empty', 'div'));
     }
 
+    function readURL(input,call) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-user-img').attr('src', e.target.result);
+                call();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var object = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        rotate: 0,
+        scaleX: 0,
+        scaleY: 0
+    };
+
     $(function(){
         $('.ajax [data-toggle="tab"]').click(function(e) {
             var $this = $(this),
@@ -536,27 +560,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
             return false;
         });
 
+
+        $('#userPhoto').on('submit', setImg);
+
+
         $('input[name=userProfileFile]').on('change', function () {
 
-            $('#imageResize').modal('show');
+            readURL(this,function () {
+                $('.profile-user-img').cropper({
+                    aspectRatio: 16 / 9,
+                    crop: function(e) {
+                        // Output the result data for cropping image.
+                        object.x = e.x;
+                        object.y = e.y;
+                        object.width = e.width;
+                        object.height = e.height;
+                        object.rotate = e.rotate;
+                        object.scaleX = e.scaleX;
+                        object.scaleY = e.scaleY;
+                    }
+                });
 
-            $('#image').cropper({
-                aspectRatio: 16 / 9,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    console.log(e.x);
-                    console.log(e.y);
-                    console.log(e.width);
-                    console.log(e.height);
-                    console.log(e.rotate);
-                    console.log(e.scaleX);
-                    console.log(e.scaleY);
-                }
             });
         });
     });
 
+    function setImg () {
+        var newSaveData = new FormData();
 
+
+       $('input[type=file]').each(function(key, value){
+            if(value.files[0]){
+                newSaveData.append('user_photo',value.files[0]);
+            }
+        });
+
+        $.each(object,function (k,v) {
+            newSaveData.append(k,v);
+        })
+
+
+
+
+        $.ajax({
+            url: '/uploadUserPhoto' ,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            success: function(data){
+
+
+            },
+            data : newSaveData
+        });
+
+        return false;
+    }
 
 </script>
 

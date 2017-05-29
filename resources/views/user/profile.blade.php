@@ -47,7 +47,7 @@
                                 </li>
                             </ul>
                         --}}
-                        {!! Form::open(['url' => 'uploadUserPhoto', 'files'=>true]) !!}
+                        {!! Form::open(['url' => 'uploadUserPhoto', 'files'=>true, 'id' => 'userPhoto']) !!}
                         {{ Form::hidden('userId', Auth::user()->id) }}
                         <div class="row">
                             <div class="col-md-6">
