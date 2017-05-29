@@ -102,14 +102,14 @@
                     <script type="text/javascript">
 
                         var totalTimeCount = {
-                            hours: 0,
-                            minute: 0,
-                            check: function(){
-                                if(this.minute > 60){
-                                    this.minute -= 60;
-                                    this.minute.toString().length == 1 ? this.minute = "0" + this.minute : '';
-                                    this.hours++;
-                                }
+                            count: 0,
+                            getTime: function(){
+                                var sec = this.count ;
+                                var h = sec/3600 ^ 0 ;
+                                var m = (sec-h*3600)/60 ^ 0 ;
+                                var s = sec-h*3600-m*60 ;
+                                return ((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));/*+" мин. "+(s<10?"0"+s:s)+" сек.")*/
+
                             }
                         };
 
@@ -151,7 +151,7 @@
                                     });
 
                                     $('#reportResultTable tbody').html(html);
-                                    $('#reportResultTable tfoot tr td span').text(totalTimeCount.hours + ':' + totalTimeCount.minute);
+                                    $('#reportResultTable tfoot tr td span').text(totalTimeCount.getTime());
                                 });
                                 //console.log(selectReportForm);
                             });
@@ -165,16 +165,18 @@
                             //console.log(hours);
 
                             minute = parseInt(splitTime[1]);
-                            minute = minute%60;
-
+                            /*minute = minute%60;*/
 
                             second = parseInt(splitTime[2]);
-                            minute = minute + second/60;
-                            second = second%60;
+                            /*minute = minute + second/60;
+                            second = second%60;*/
 
-                            totalTimeCount.hours += hours;
-                            totalTimeCount.minute += minute;
-                            totalTimeCount.check();
+                           // moment.duration("12:10:12", "HH:mm:ss");
+
+                           // console.log(hours + ':' + minute + ':' + second);
+
+                            totalTimeCount.count += hours*60*60 + minute*60 + second;
+
                         }
 
                         function prettyTime(time, timeNotation, showZero) {

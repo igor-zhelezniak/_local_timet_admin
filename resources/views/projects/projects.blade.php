@@ -36,7 +36,7 @@
 					@foreach($projects as $project)
 						<tr>
 							<td>{{$project->project_id}}</td>
-							<td>{{$project->project_type}}</td>
+							<td>{{$project->project_type_name}}</td>
 							<td>{{$project->project_name}}</td>
 							<td>{{$project->project_description}}</td>
 							<td>{{$project->clName}}</td>

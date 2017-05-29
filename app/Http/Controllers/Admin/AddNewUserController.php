@@ -62,7 +62,7 @@ class AddNewUserController extends Controller
             $users->where('users.status', $request->status);
         }
 
-        $users->select('users.id', 'users.name', 'users.email', 'users.role', 'statuses.status_name');
+        $users->select('users.id', 'users.name', 'users.email', 'roles.role_name as roleName', 'statuses.status_name');
 
         $users = $users->get();
 
@@ -156,7 +156,12 @@ class AddNewUserController extends Controller
                 '1.15 = час и 15 минут',
                 '1:15 = час и 15 минут'
             ];
-            $cities = $this->getCityByCountry($company->country);
+
+            $cities = [];
+            if(!is_null($company->country)){
+                $cities = $this->getCityByCountry($company->country);
+            }
+
 
             return view('user/profile')
                 ->with('countries', $this->getCountriesList())
