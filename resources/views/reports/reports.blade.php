@@ -101,10 +101,22 @@
 
                     <script type="text/javascript">
 
+                        var totalTimeCount = {
+                            hours: 0,
+                            minute: 0,
+                            check: function(){
+                                if(this.minute > 60){
+                                    this.minute -= 60;
+                                    this.minute.toString().length == 1 ? this.minute = "0" + this.minute : '';
+                                    this.hours++;
+                                }
+                            }
+                        };
 
                         $(function () {
 
                             var myDate = new Date();
+
 
                             $('.datetimepickerFrom').datetimepicker({
                                 format: 'YYYY-MM-DD',
@@ -121,7 +133,7 @@
                                 $.post('/showReportResult', selectReportForm, function (data) {
 
                                     var html = '';
-                                    var totalTimeCount = 0;
+
                                     var totalTimeCountHours = 0;
                                     var totalTimeCountMinutes = 0;
                                     $.each(data.result,function(key, value){
@@ -132,13 +144,12 @@
                                             "<td>" + value.categoryName + "</td>" +
                                             "<td>" + value.description + "</td>" +
                                             "<td>" + prettyTime(value.worked_time, 'hour', true) + "</td>" +
-                                            "</tr>"
-                                        totalTimeCount += sumTime(value.worked_time);
-
+                                            "</tr>";
+                                        sumTime(value.worked_time);
                                     });
 
                                     $('#reportResultTable tbody').html(html);
-                                    $('#reportResultTable tfoot tr td span').text(totalTimeCount);
+                                    $('#reportResultTable tfoot tr td span').text(totalTimeCount.hours + ':' + totalTimeCount.minute);
                                 });
                                 //console.log(selectReportForm);
                             });
@@ -148,9 +159,8 @@
 
                             var splitTime = time.split(':');
 
-                            totalTimeCount = 0;
                             hours = parseInt(splitTime[0]);
-                            console.log(hours);
+                            //console.log(hours);
 
                             minute = parseInt(splitTime[1]);
                             minute = minute%60;
@@ -160,11 +170,9 @@
                             minute = minute + second/60;
                             second = second%60;
 
-
-                            totalTimeCount += hours;
-                            console.log(+hours+':'+minute+':'+second + 'sum = ' + totalTimeCount);
-
-                            return hours + ':' + minute;
+                            totalTimeCount.hours += hours;
+                            totalTimeCount.minute += minute;
+                            totalTimeCount.check();
                         }
 
                         function prettyTime(time, timeNotation, showZero) {
@@ -256,7 +264,7 @@
                                 time = '';
                             }
 
-                            console.log(time + " tt");
+                            //console.log(time + " tt");
 
                             return time;
                         }
