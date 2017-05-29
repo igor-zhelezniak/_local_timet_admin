@@ -5,11 +5,10 @@
     <div class="register-logo">
         <a href="/">{{ config('app.name') }}</a>
     </div>
-
     <div class="register-box-body">
         <p class="login-box-msg">Register a new membership</p>
 
-        <form action="{{url('/register')}}" method="post">
+        <form action="{{url('/register')}}" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
             <div class="form-group{{ $errors->has('company_name') ? ' has-error' : '' }} has-feedback">
                 <input type="text" class="form-control" placeholder="Company name" name="company_name" required autofocus>
@@ -60,6 +59,51 @@
                                     </span>
                 @endif
             </div>
+
+            <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }} has-feedback">
+                {{ Form::select('country', [null => 'Select Country'] + $countries, null, ['class' => 'form-control']) }}
+            </div>
+
+            <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }} has-feedback">
+                <select name="city" class="form-control">
+                    <option disabled selected>Select City</option>
+                </select>
+            </div>
+
+            <div class="form-group{{ $errors->has('adress') ? ' has-error' : '' }} has-feedback">
+                <input type="text" name="adress" class="form-control" placeholder="Adress" required>
+                <span class="glyphicon glyphicon-tent form-control-feedback"></span>
+            </div>
+
+            <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }} has-feedback">
+                {{ Form::select('timezone', ['Select Timezone'] + $timezones->all(), 0, ['class' => 'form-control']) }}
+            </div>
+
+            <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }} has-feedback">
+                <input type="number" class="form-control" placeholder="Phone number" name="phone_number" required>
+                <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
+
+                @if ($errors->has('phone_number'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('phone_number') }}</strong>
+                    </span>
+                @endif
+            </div>
+
+            <div class="form-group{{ $errors->has('companyLogo') ? ' has-error' : '' }} has-feedback">
+                <input type="file" class="form-control" name="companyLogo">
+
+                @if ($errors->has('companyLogo'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('phone_number') }}</strong>
+                    </span>
+                @endif
+            </div>
+
+            <div class="form-group{{ $errors->has('nominal') ? ' has-error' : '' }} has-feedback">
+                {{ Form::select('nominal', [null => 'Select Nominal'] + $nominals, null, ['class' => 'form-control']) }}
+            </div>
+
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">
@@ -81,6 +125,24 @@
     <!-- /.form-box -->
 </div>
 
+<script>
+
+    function ajaxGetCityByCountry() {
+        var el = $(this).find(':selected').val();
+        $('select[name=city]').empty();
+        $.get('/ajaxGetCity/' + el,function (data) {
+            var json = JSON.parse(data);
+            $.each(json, function(i, value) {
+                $('select[name=city]').append($('<option>').text(value).attr('value', value));
+            });
+        })
+
+    }
+
+    $(function(){
+          $('select[name=country]').on('change', ajaxGetCityByCountry);
+    });
+</script>
 <!--
 <div class="container">
     <div class="row">

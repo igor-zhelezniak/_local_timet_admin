@@ -80,3 +80,5 @@ Route::post('/uploadUserPhoto', 'Admin\AddNewUserController@uploadUserPhoto');
 Route::get('/ajaxGetUsers/{status}', 'Admin\AddNewUserController@ajaxGetUsers');
 Route::get('/ajaxGetClients/{status}', 'Admin\CustomerController@ajaxGetClients');
 Route::get('/ajaxGetProjects/{status}', 'ProjectController@ajaxGetProjects');
+
+Route::get('/ajaxGetCity/{code}', 'Auth\RegisterController@ajaxGetCity');
