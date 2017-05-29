@@ -92,7 +92,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset("/js/bootstrap-datepicker.js") }}"></script>
 <script src="{{ asset("/js/bootstrap-datepaginator.js") }}"></script>
 <script src="{{ asset("/vendor/bootstrap-datepicker/js/bootstrap-datetimepicker.min.js") }}"></script>
-
+<script src="{{ asset("/bower_components/AdminLTE/plugins/iCheck/icheck.js") }}"></script>
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    });
+</script>
 
 
 </body>
