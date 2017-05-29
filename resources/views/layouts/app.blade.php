@@ -59,6 +59,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.0/jquery-migrate.js"></script>
     <script src="{{ asset("/js/app.js") }}"></script>
 
+    <script src="/js/cropper.js"></script>
+    <link  href="/css/cropper.css" rel="stylesheet">
+
     <!-- Bootstrap 3.3.6 -->
     <script src="{{ asset("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
 
@@ -532,7 +535,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $this.tab('show');
             return false;
         });
+
+        $('input[name=userProfileFile]').on('change', function () {
+
+            $('#imageResize').modal('show');
+
+            $('#image').cropper({
+                aspectRatio: 16 / 9,
+                crop: function(e) {
+                    // Output the result data for cropping image.
+                    console.log(e.x);
+                    console.log(e.y);
+                    console.log(e.width);
+                    console.log(e.height);
+                    console.log(e.rotate);
+                    console.log(e.scaleX);
+                    console.log(e.scaleY);
+                }
+            });
+        });
     });
+
+
 
 </script>
 
