@@ -129,31 +129,42 @@
                             });
 
                             $('#showReportsResult').click(function () {
-                                totalTimeCount.minute = 0;
-                                totalTimeCount.hours = 0;
-                                var selectReportForm = $('#selectReportForm').serialize();
-                                $.post('/showReportResult', selectReportForm, function (data) {
 
-                                    var html = '';
+                                if(!$(this).hasClass('block')){
+                                    $(this).addClass('block');
 
-                                    var totalTimeCountHours = 0;
-                                    var totalTimeCountMinutes = 0;
-                                    $.each(data.result,function(key, value){
 
-                                        html += "<tr><td>" + value.logged_date + "</td>" +
-                                            "<td>" + value.userName + "</td>" +
-                                            "<td>" + value.projectName + "</td>" +
-                                            "<td>" + value.categoryName + "</td>" +
-                                            "<td>" + value.description + "</td>" +
-                                            "<td>" + prettyTime(value.worked_time, 'hour', true) + "</td>" +
-                                            "</tr>";
-                                        sumTime(value.worked_time);
+                                    $('#reportResultTable tfoot tr td').empty();
+                                    totalTimeCount.count = 0;
+                                    var selectReportForm = $('#selectReportForm').serialize();
+                                    $.post('/showReportResult', selectReportForm, function (data) {
+
+                                        var html = '';
+
+                                        var totalTimeCountHours = 0;
+                                        var totalTimeCountMinutes = 0;
+                                        $.each(data.result,function(key, value){
+
+                                            html += "<tr><td>" + value.logged_date + "</td>" +
+                                                "<td>" + value.userName + "</td>" +
+                                                "<td>" + value.projectName + "</td>" +
+                                                "<td>" + value.categoryName + "</td>" +
+                                                "<td>" + value.description + "</td>" +
+                                                "<td>" + prettyTime(value.worked_time, 'hour', true) + "</td>" +
+                                                "</tr>";
+                                            sumTime(value.worked_time);
+                                        });
+
+                                        $('#reportResultTable tbody').html(html);
+
+                                        if(data.result.length >= 1){
+                                            $('#reportResultTable tfoot tr td').html('total <span>' + totalTimeCount.getTime() + '</span>');
+
+                                        }
+                                        $('#showReportsResult').removeClass('block');
                                     });
-
-                                    $('#reportResultTable tbody').html(html);
-                                    $('#reportResultTable tfoot tr td span').text(totalTimeCount.getTime());
-                                });
-                                //console.log(selectReportForm);
+                                    //console.log(selectReportForm);
+                                }
                             });
                         });
 
@@ -303,7 +314,7 @@
                         <tfoot>
                         <tr>
                             <td colspan="6" class="text-right">
-                                total <span></span>
+
                             </td>
                         </tr>
                         </tfoot>

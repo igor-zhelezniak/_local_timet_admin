@@ -398,50 +398,6 @@
                                     </div>
                                 </div>
 
-                                {{--      <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }} has-feedback">
-                                        {{ Form::select('country',/* [null => 'Select Country'] + */$countries, null, ['class' => 'form-control']) }}
-                                    </div>
-
-                       {{--       <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }} has-feedback">
-                                        <select name="city" class="form-control">
-                                            <option disabled selected>Select City</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('adress') ? ' has-error' : '' }} has-feedback">
-                                        <input type="text" name="adress" class="form-control" placeholder="Adress" required>
-                                        <span class="glyphicon glyphicon-tent form-control-feedback"></span>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }} has-feedback">
-                                        {{ Form::select('timezone', ['Select Timezone'] + $timezones->all(), 0, ['class' => 'form-control']) }}
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }} has-feedback">
-                                        <input type="number" class="form-control" placeholder="Phone number" name="phone_number" required>
-                                        <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
-
-                                        @if ($errors->has('phone_number'))
-                                            <span class="help-block">
-                                                 <strong>{{ $errors->first('phone_number') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('companyLogo') ? ' has-error' : '' }} has-feedback">
-                                        <input type="file" class="form-control" name="companyLogo">
-
-                                        @if ($errors->has('companyLogo'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('phone_number') }}</strong>
-                                             </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('nominal') ? ' has-error' : '' }} has-feedback">
-                                        {{ Form::select('nominal', [null => 'Select Nominal'] + $nominals, null, ['class' => 'form-control']) }}
-                                    </div>--}}
-
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-danger">Submit</button>
@@ -467,7 +423,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+{{--                                    <div class="form-group">
                                         <label for="inputSkills" class="col-sm-2 control-label">Country</label>
 
                                         <div class="col-sm-10">
@@ -481,13 +437,13 @@
                                         <div class="col-sm-10">
                                             {{ Form::select('city', $cities, $company->city, ['class' => 'form-control']) }}
                                         </div>
-                                    </div>
+                                    </div>--}}
 
                                     <div class="form-group">
-                                        <label for="inputSkills" class="col-sm-2 control-label">Adress</label>
+                                        <label for="inputSkills" class="col-sm-2 control-label">Address</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" name="adress" value="{{ $company->adress }}" class="form-control" placeholder="Adress" required>
+                                            <input type="text" name="adress" value="{{ $company->adress }}" class="form-control" placeholder="Adress">
                                         </div>
                                     </div>
 
@@ -503,7 +459,7 @@
                                         <label for="inputSkills" class="col-sm-2 control-label">Phone Number</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" value="{{ $company->phone_number }}" placeholder="Phone number" name="phone_number" required>
+                                            <input type="text" class="form-control" value="{{ $company->phone_number }}" placeholder="Phone number" name="phone_number">
                                         </div>
                                     </div>
 
