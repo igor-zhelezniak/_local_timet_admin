@@ -189,7 +189,7 @@ INSERT INTO `companies` (`id`, `name`, `code`, `url`, `description`, `companyLog
 	(10, 'TestC', '', '', '', 'company-logo.png', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-04 22:10:48', '2017-04-04 22:10:48'),
 	(11, 'CompanyA', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-08 15:23:19', '2017-05-08 15:23:19'),
 	(12, 'Aspins Media', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-21 22:43:03', '2017-05-21 22:43:03'),
-	(13, 'test_test', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-23 12:32:49', '2017-05-23 12:32:49'),
+	(13, 'test_test', '', '', '', NULL, 'AG', 'Liberta', '3fegdfgdf', 4, '45345345345', 1, '2017-05-23 12:32:49', '2017-05-30 08:20:48'),
 	(27, 'ghfgfghfgh', '', '', '', '', 'CU', 'Camagüey', 'dsfgdfhfg', 16, '5464567567567', NULL, '2017-05-26 06:52:47', '2017-05-26 06:52:47'),
 	(28, 'fgjhfghf', '', '', '', 'company-logo.jpg', 'TG', 'Lomé', '122334234534', 14, '3464564567567567', 0, '2017-05-29 10:37:39', '2017-05-29 12:06:24');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `project_status` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы timet.projects: ~11 rows (приблизительно)
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
@@ -328,7 +328,8 @@ INSERT INTO `projects` (`id`, `project_name`, `project_description`, `project_cu
 	(9, 'ProjName2', 'dsakfhj', 10, 32, 324.00, 15, 1, 1, 8),
 	(10, 'Project One Test 1', 'dkshfkjkjkjjk', 12, 252, 988.00, 19, 1, 1, 10),
 	(11, 'AdminLte1', 'jekgedfjh', 12, 33, 232.00, 19, 1, 1, 10),
-	(12, 'kejfgkfdjghb', 'KJHFDKJHFDHB', 17, 345345, 564564.00, NULL, 2, 4, 13);
+	(12, 'kejfgkfdjghb', 'KJHFDKJHFDHB', 17, 345345, 564564.00, NULL, 2, 4, 13),
+	(13, 'fhfghfhf', 'ghjfgjfgj', 17, 345, 545.00, 39, 1, 1, 13);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.projects_clients
@@ -396,7 +397,8 @@ INSERT INTO `projects_users` (`project_id`, `user_id`) VALUES
 	(9, 14),
 	(10, 18),
 	(11, 18),
-	(12, 39);
+	(12, 39),
+	(13, 39);
 /*!40000 ALTER TABLE `projects_users` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.roles
@@ -445,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `timesheet` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=280 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=282 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы timet.timesheet: ~258 rows (приблизительно)
 /*!40000 ALTER TABLE `timesheet` DISABLE KEYS */;
@@ -713,44 +715,58 @@ INSERT INTO `timesheet` (`id`, `user_id`, `project_id`, `category_id`, `descript
 	(276, 39, 12, 16, 'rdgtdtg', '01:00:00', '2017-05-26', NULL, NULL),
 	(277, 39, 12, 16, 'desafgdfg', '02:00:00', '2017-05-26', NULL, NULL),
 	(278, 39, 12, 16, 'hjhgjghjghjghj', '01:15:00', '2017-05-23', NULL, NULL),
-	(279, 39, 12, 16, 'bmgvhbmgbhnmgh', '02:50:00', '2017-05-29', NULL, NULL);
+	(279, 39, 12, 16, 'bmgvhbmgbhnmgh', '02:50:00', '2017-05-29', NULL, NULL),
+	(280, 39, 12, 16, 'rtghfghfgh', '01:52:00', '2017-05-29', NULL, NULL),
+	(281, 39, 12, 16, 'dfgdfgd', '00:03:00', '2017-05-29', NULL, NULL);
 /*!40000 ALTER TABLE `timesheet` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.timezones
 CREATE TABLE IF NOT EXISTS `timezones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `timezone` varchar(50) DEFAULT NULL,
+  `timezone` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы timet.timezones: ~25 rows (приблизительно)
+-- Дамп данных таблицы timet.timezones: ~29 rows (приблизительно)
 /*!40000 ALTER TABLE `timezones` DISABLE KEYS */;
 INSERT INTO `timezones` (`id`, `timezone`) VALUES
-	(1, 'GMT -12'),
-	(2, 'GMT -11'),
-	(3, 'GMT -10'),
-	(4, 'GMT -9'),
-	(5, 'GMT -8'),
-	(6, 'GMT -7'),
-	(7, 'GMT -6'),
-	(8, 'GMT -5'),
-	(9, 'GMT -4'),
-	(10, 'GMT -3'),
-	(11, 'GMT -2'),
-	(12, 'GMT -1'),
-	(13, 'GMT 0'),
-	(14, 'GMT +1'),
-	(15, 'GMT +2'),
-	(16, 'GMT +3'),
-	(17, 'GMT +4'),
-	(18, 'GMT +5'),
-	(19, 'GMT +6'),
-	(20, 'GMT +7'),
-	(21, 'GMT +8'),
-	(22, 'GMT +9'),
-	(23, 'GMT +10'),
-	(26, 'GMT +11'),
-	(27, 'GMT +12');
+	(1, 'GMT+00:00 - Casablanca, Dublin, Edinburgh, Lisbon'),
+	(2, 'GMT+01:00 - Amsterdam, Berlin, Paris, Madrid, Oslo'),
+	(3, 'GMT+02:00 - Athens, Helsinki, Istanbul, Jerusalem '),
+	(4, 'GMT+03:00 - Baggdad, Kuwait, Moscow, Nairobi (BT)'),
+	(5, 'GMT+03:30 - Tehran'),
+	(6, 'GMT+04:00 - Kabul, Muscat, Tblisi, Volgograd'),
+	(7, 'GMT+04:30 - Afghanistan'),
+	(8, 'GMT+05:00 - Ekaterinburg, Islamabad, Karachi'),
+	(9, 'GMT+05:30 - India '),
+	(10, 'GMT+06:00 - Almaty, Astana, Dhaka, Novosibirsk'),
+	(11, 'GMT+06:30 - Cocos Islands'),
+	(12, 'GMT+07:00 - Bangkok, Hanoi, Jakarta'),
+	(13, 'GMT+08:00 - Beijing, Hong Kong, Irkutsk, Perth'),
+	(14, 'GMT+09:00 - Osaka, Saporro, Seoul, Tokyo, Yakutsk '),
+	(15, 'GMT+09:30 - Adelaide, Darwin (ACST)'),
+	(16, 'GMT+10:00 - Brisbane, Canberra, Guam, Melbourne'),
+	(17, 'GMT+10:30 - Lord Howe Island '),
+	(18, 'GMT+11:00 - Magadan, New Caledonia, Solomon Island'),
+	(19, 'GMT+11:30 - Norfolk Island'),
+	(20, 'GMT+12:00 - Auckland, Fiji, Marshall Islands, Well'),
+	(21, 'GMT+13:00 - Rawaki Islands'),
+	(22, 'GMT+14:00 - Line Islands'),
+	(23, 'GMT-01:00 - Azores, Cape Verde Islands (WAT)'),
+	(26, 'GMT-02:00 - Azores, Mid-Atlantic (AT)'),
+	(27, 'GMT-03:00 - Brasilia, Buenos Aires, Georgetown'),
+	(28, 'GMT-03:30 - Newfoundland'),
+	(29, 'GMT-04:00 - Caracas, La Paz, Santiago (AST)'),
+	(30, 'GMT-05:00 - Bogota, Lima, New York (EST)'),
+	(31, 'GMT-06:00 - Mexico City, Monterrey, Saskatchewan'),
+	(32, 'GMT-07:00 - Arizona, Chihuahua, Mazatlan (MST)'),
+	(33, 'GMT-08:00 - Los Angeles, Tijuana (PST)'),
+	(34, 'GMT-08:30'),
+	(35, 'GMT-09:00 - Alaska, Yukon (YST)'),
+	(36, 'GMT-09:30 '),
+	(37, 'GMT-10:00 - Alaska, Hawaii (AHST, CAT, HST)'),
+	(38, 'GMT-11:00 - Nome, Samoa (NT)'),
+	(39, 'GMT-12:00 - International Date Line West');
 /*!40000 ALTER TABLE `timezones` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.users
@@ -771,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы timet.users: ~37 rows (приблизительно)
+-- Дамп данных таблицы timet.users: ~36 rows (приблизительно)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `status`, `user_parent`, `company_id`, `profile_img`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(1, 'Admin', 'admin@admin.com', '$2y$10$VEIvgu79DPDKJNC2ROT5pO4f3WML9a3mBAJevqcViqsBlBl6ayFMy', 1, 5, NULL, 1, NULL, '7AbtCxLXLNV8ADgocZAQARGbCBFsBvDmUQeffSJNDB58aRrZ5iylrDYcSQEe', NULL, '2017-04-18 19:03:58'),
@@ -809,7 +825,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `status`, `user_
 	(36, 'nT9', 'a@a9.com', '$2y$10$Z6ITqT/BTi6E74qkA3FSQeGSSzsB.Xq1pgvXKPyNre6EMGKmq23oy', 2, 4, 18, 10, 'profile-image.jpg', NULL, NULL, NULL),
 	(37, 'nT11-1', 'a@a11-1.com', '$2y$10$UtYmv5SqKg13cCQUcZkK6uOnKul98lTYPd/7QGBGF6kaCrOmHV/TK', 1, 1, 18, 10, 'profile-image.jpg', 'VMPtizxedr1gKxjwOQDS8emr9VlcaF6siZyVl1EHo8pVIMb3DkIzdDdAp9dG', NULL, '2017-05-21 22:42:17'),
 	(38, 'Dima', 'info1@aspins-media.com', '$2y$10$RpzpRnGG0D0BIXa3dSFLxueiYuskcB3c3TMlKQczkTQ.k6/SJv4Tq', 1, 1, NULL, 12, 'profile-image.jpg', 'Ye88tNupcbOrwPL0RQWXjS0tFoYkQfSMtJjetuz5ud9XUq2ruzg8NdXMylgh', '2017-05-21 22:43:04', '2017-05-21 22:59:15'),
-	(39, 'test_test', 'test_test@test.com', '$2y$10$NFFkb7/i0rQ/KcVpze7BWeKYA2/YPiSOsjyfVb9h.LMLOKqUC2P3u', 1, 1, NULL, 13, 'profile-image.jpg', '2LqDscvWKKHjg758ANmfjO8Zujp5V6Rp4DN5U4ckRFELqsUoSva1syMWVzEm', '2017-05-23 12:32:49', '2017-05-29 10:35:25'),
+	(39, 'test_test', 'test_test@test.com', '$2y$10$NFFkb7/i0rQ/KcVpze7BWeKYA2/YPiSOsjyfVb9h.LMLOKqUC2P3u', 1, 1, NULL, 13, 'profile-image.jpg', 'KG3X56JFwzK4dBehbESkpPPBYUIG2qM1HoEPQEckKkeqmxhlYYqxdqe9YauH', '2017-05-23 12:32:49', '2017-05-29 14:41:56'),
 	(45, 'fghfghfgh', 'test_thgjghjgest@test.com', '$2y$10$CIk8yCycz25MSZaCyVL6ROVFyKF2EDBEwd.t4/uEgk/BiYlAbX9aG', 1, 1, NULL, 27, 'profile-image.jpg', 'Vy1MO6hqOvVUa7VnYPlyzOWBTkbayoKqLtPVmRqHQtalNQeovPOPntv4s7Na', '2017-05-26 06:52:48', '2017-05-26 07:29:25'),
 	(47, 'dhfghghfdghfghfghfgh', 'test_test@test.com1', '$2y$10$esftTgmPHMFHNLhiT5QM7e0Pnw6KeM7nIo.Dd91BjXaOnXh2z/r1a', 1, 3, 39, 13, NULL, NULL, NULL, NULL),
 	(48, 'tyjtyj', 'ytjyjt@ru.ru', '$2y$10$iI8Dzz3wJ/XhXNfR3E4h7OlloEtys2EfnNzMwAOw4Um0Xq5rU7CJm', 1, 1, NULL, 28, 'profile-image.jpg', '58qnGM2mW6kZQSWbhA4UTzMk0VfOjIssad1KfAMTyCSLehPipZpupRKWrHRq', '2017-05-29 10:37:39', '2017-05-29 12:20:27');
