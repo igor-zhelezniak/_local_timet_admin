@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\CompanyInfo;
+use App\Plan;
 use App\User;
 use App\UsersCompany;
 
+use Carbon\Carbon;
 use Image;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -88,6 +90,11 @@ class RegisterController extends Controller
             'url' => '',
             'description' =>'',
 
+        ]);
+
+        Plan::create([
+           'company_id' => $copmany->id,
+            'expiration' =>  Carbon::now()->addMonth(1)->toDateString()
         ]);
 
         $users = User::create([
