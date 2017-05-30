@@ -18,7 +18,11 @@ class Plan extends Model
     public static $plan = null;
 
     public static function getPlan($id){
-       return Plan::where('company_id', $id)->select('type')->get()->first()->type;
+        $plan = Plan::where('company_id', $id)->select('type')->get()->first();
+        if(!is_null($plan)){
+            return $plan->type;
+        }
+       return 1;
     }
 
     public static function setPlan(){
