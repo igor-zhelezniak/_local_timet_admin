@@ -172,9 +172,9 @@ CREATE TABLE IF NOT EXISTS `companies` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы timet.companies: ~14 rows (приблизительно)
+-- Дамп данных таблицы timet.companies: ~20 rows (приблизительно)
 /*!40000 ALTER TABLE `companies` DISABLE KEYS */;
 INSERT INTO `companies` (`id`, `name`, `code`, `url`, `description`, `companyLogo`, `country`, `city`, `adress`, `timezone`, `phone_number`, `nominal`, `created_at`, `updated_at`) VALUES
 	(1, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-03-16 22:30:15', '2017-03-16 22:30:15'),
@@ -189,10 +189,34 @@ INSERT INTO `companies` (`id`, `name`, `code`, `url`, `description`, `companyLog
 	(10, 'TestC', '', '', '', 'company-logo.png', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-04 22:10:48', '2017-04-04 22:10:48'),
 	(11, 'CompanyA', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-08 15:23:19', '2017-05-08 15:23:19'),
 	(12, 'Aspins Media', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-21 22:43:03', '2017-05-21 22:43:03'),
-	(13, 'test_test', '', '', '', NULL, 'AG', 'Liberta', '3fegdfgdf', 4, '45345345345', 1, '2017-05-23 12:32:49', '2017-05-30 08:20:48'),
+	(13, 'test_test', '', '', '', NULL, 'AG', 'Liberta', '', 6, '', 2, '2017-05-23 12:32:49', '2017-05-30 14:40:43'),
 	(27, 'ghfgfghfgh', '', '', '', '', 'CU', 'Camagüey', 'dsfgdfhfg', 16, '5464567567567', NULL, '2017-05-26 06:52:47', '2017-05-26 06:52:47'),
-	(28, 'fgjhfghf', '', '', '', 'company-logo.jpg', 'TG', 'Lomé', '122334234534', 14, '3464564567567567', 0, '2017-05-29 10:37:39', '2017-05-29 12:06:24');
+	(28, 'fgjhfghf', '', '', '', 'company-logo.jpg', 'TG', 'Lomé', '122334234534', 14, '3464564567567567', 0, '2017-05-29 10:37:39', '2017-05-29 12:06:24'),
+	(29, 'jkhgkjfgkjdhb', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:09:55', '2017-05-30 15:09:55'),
+	(30, 'jkhgkjfgkjdhb', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:10:36', '2017-05-30 15:10:36'),
+	(31, 'gsdkjhdkfjgh', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:11:29', '2017-05-30 15:11:29'),
+	(32, 'gsdkjhdkfjgh', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:11:50', '2017-05-30 15:11:50'),
+	(33, 'gsdkjhdkfjgh', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:12:15', '2017-05-30 15:12:15'),
+	(34, 'gsdkjhdkfjgh', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:13:40', '2017-05-30 15:13:40'),
+	(35, 'gsdkjhdkfjgh', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-30 15:14:52', '2017-05-30 15:14:52');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
+
+-- Дамп структуры для таблица timet.companies_plans
+CREATE TABLE IF NOT EXISTS `companies_plans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) NOT NULL DEFAULT '0',
+  `expiration` date DEFAULT NULL,
+  `status` bit(1) DEFAULT b'1',
+  `type` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы timet.companies_plans: ~0 rows (приблизительно)
+/*!40000 ALTER TABLE `companies_plans` DISABLE KEYS */;
+INSERT INTO `companies_plans` (`id`, `company_id`, `expiration`, `status`, `type`) VALUES
+	(1, 13, '2017-06-30', b'1', 3),
+	(2, 35, '2017-06-30', b'1', 1);
+/*!40000 ALTER TABLE `companies_plans` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.departments
 CREATE TABLE IF NOT EXISTS `departments` (
@@ -298,6 +322,24 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 	('a@a.com', '3112fd82cfdbd96155300bee0314b251f50895f9c9e8aae6ec13daf308c94aa8', '2017-05-08 15:36:02');
 /*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+
+-- Дамп структуры для таблица timet.payment_plan
+CREATE TABLE IF NOT EXISTS `payment_plan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `price` float DEFAULT NULL,
+  `mounths` int(11) DEFAULT NULL,
+  `type` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы timet.payment_plan: ~3 rows (приблизительно)
+/*!40000 ALTER TABLE `payment_plan` DISABLE KEYS */;
+INSERT INTO `payment_plan` (`id`, `name`, `price`, `mounths`, `type`) VALUES
+	(1, 'Free', 0, 3, 1),
+	(2, 'Pro', 12.3, 3, 2),
+	(3, 'Enterprice', 120.99, 3, 3);
+/*!40000 ALTER TABLE `payment_plan` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.projects
 CREATE TABLE IF NOT EXISTS `projects` (
@@ -727,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `timezones` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы timet.timezones: ~29 rows (приблизительно)
+-- Дамп данных таблицы timet.timezones: ~37 rows (приблизительно)
 /*!40000 ALTER TABLE `timezones` DISABLE KEYS */;
 INSERT INTO `timezones` (`id`, `timezone`) VALUES
 	(1, 'GMT+00:00 - Casablanca, Dublin, Edinburgh, Lisbon'),
@@ -785,9 +827,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы timet.users: ~36 rows (приблизительно)
+-- Дамп данных таблицы timet.users: ~37 rows (приблизительно)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `status`, `user_parent`, `company_id`, `profile_img`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(1, 'Admin', 'admin@admin.com', '$2y$10$VEIvgu79DPDKJNC2ROT5pO4f3WML9a3mBAJevqcViqsBlBl6ayFMy', 1, 5, NULL, 1, NULL, '7AbtCxLXLNV8ADgocZAQARGbCBFsBvDmUQeffSJNDB58aRrZ5iylrDYcSQEe', NULL, '2017-04-18 19:03:58'),
@@ -825,10 +867,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `status`, `user_
 	(36, 'nT9', 'a@a9.com', '$2y$10$Z6ITqT/BTi6E74qkA3FSQeGSSzsB.Xq1pgvXKPyNre6EMGKmq23oy', 2, 4, 18, 10, 'profile-image.jpg', NULL, NULL, NULL),
 	(37, 'nT11-1', 'a@a11-1.com', '$2y$10$UtYmv5SqKg13cCQUcZkK6uOnKul98lTYPd/7QGBGF6kaCrOmHV/TK', 1, 1, 18, 10, 'profile-image.jpg', 'VMPtizxedr1gKxjwOQDS8emr9VlcaF6siZyVl1EHo8pVIMb3DkIzdDdAp9dG', NULL, '2017-05-21 22:42:17'),
 	(38, 'Dima', 'info1@aspins-media.com', '$2y$10$RpzpRnGG0D0BIXa3dSFLxueiYuskcB3c3TMlKQczkTQ.k6/SJv4Tq', 1, 1, NULL, 12, 'profile-image.jpg', 'Ye88tNupcbOrwPL0RQWXjS0tFoYkQfSMtJjetuz5ud9XUq2ruzg8NdXMylgh', '2017-05-21 22:43:04', '2017-05-21 22:59:15'),
-	(39, 'test_test', 'test_test@test.com', '$2y$10$NFFkb7/i0rQ/KcVpze7BWeKYA2/YPiSOsjyfVb9h.LMLOKqUC2P3u', 1, 1, NULL, 13, 'profile-image.jpg', 'KG3X56JFwzK4dBehbESkpPPBYUIG2qM1HoEPQEckKkeqmxhlYYqxdqe9YauH', '2017-05-23 12:32:49', '2017-05-29 14:41:56'),
+	(39, 'test_test', 'test_test@test.com', '$2y$10$NFFkb7/i0rQ/KcVpze7BWeKYA2/YPiSOsjyfVb9h.LMLOKqUC2P3u', 1, 1, NULL, 13, 'profile-image.jpg', '2Dg9UWEGoA12uIqu6DqY4KAI74NVnnPwlSLPczCadnkSJW1L5L3Yux01LCVj', '2017-05-23 12:32:49', '2017-05-30 15:09:30'),
 	(45, 'fghfghfgh', 'test_thgjghjgest@test.com', '$2y$10$CIk8yCycz25MSZaCyVL6ROVFyKF2EDBEwd.t4/uEgk/BiYlAbX9aG', 1, 1, NULL, 27, 'profile-image.jpg', 'Vy1MO6hqOvVUa7VnYPlyzOWBTkbayoKqLtPVmRqHQtalNQeovPOPntv4s7Na', '2017-05-26 06:52:48', '2017-05-26 07:29:25'),
 	(47, 'dhfghghfdghfghfghfgh', 'test_test@test.com1', '$2y$10$esftTgmPHMFHNLhiT5QM7e0Pnw6KeM7nIo.Dd91BjXaOnXh2z/r1a', 1, 3, 39, 13, NULL, NULL, NULL, NULL),
-	(48, 'tyjtyj', 'ytjyjt@ru.ru', '$2y$10$iI8Dzz3wJ/XhXNfR3E4h7OlloEtys2EfnNzMwAOw4Um0Xq5rU7CJm', 1, 1, NULL, 28, 'profile-image.jpg', '58qnGM2mW6kZQSWbhA4UTzMk0VfOjIssad1KfAMTyCSLehPipZpupRKWrHRq', '2017-05-29 10:37:39', '2017-05-29 12:20:27');
+	(48, 'tyjtyj', 'ytjyjt@ru.ru', '$2y$10$iI8Dzz3wJ/XhXNfR3E4h7OlloEtys2EfnNzMwAOw4Um0Xq5rU7CJm', 1, 1, NULL, 28, 'profile-image.jpg', '58qnGM2mW6kZQSWbhA4UTzMk0VfOjIssad1KfAMTyCSLehPipZpupRKWrHRq', '2017-05-29 10:37:39', '2017-05-29 12:20:27'),
+	(49, 'jkfkjghfdkjh', 'mofkfgkjsakovskijj@rambler.ru', '$2y$10$AQLcr3Ck9OXsO7uBrrGyieSVHd9ibPmiJutxqLZreXbfpDaWQYVRm', 1, 1, NULL, 30, NULL, 'M9g3LUoYCU2YtiyKRXwZuYuYNoXEymN9V8d4bbx5cmKS24REcngjcbiPfOvl', '2017-05-30 15:10:36', '2017-05-30 15:10:39'),
+	(50, 'kjhkjfhkjfhg', 'mgdfgdosakovskijj@rambler.ru', '$2y$10$3vwmH6uAppZaronpgXuel.RQo.Kf5.lKjoq5yOL.BNBn631m7YtzS', 1, 1, NULL, 35, NULL, NULL, '2017-05-30 15:14:52', '2017-05-30 15:14:52');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Дамп структуры для таблица timet.users_company
