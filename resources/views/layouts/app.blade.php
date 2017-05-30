@@ -218,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- The user image in the navbar-->
                             @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                                 <img src="{{asset('uploads/users/profile') . '/' . Auth::user()->company_id . '/'
-                                . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                                . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                                      class="user-image" alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                             @else
                                 <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"
@@ -233,7 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <li class="user-header">
                                 @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                                 <img src="{{asset('uploads/users/profile') . '/' . Auth::user()->company_id . '/'
-                                    . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                                    . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                                      class="img-circle" alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                                 @else
                                     <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"
@@ -568,9 +568,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             readURL(this,function () {
                 $('.profile-user-img').cropper({
-                    aspectRatio: 16 / 9,
+                    aspectRatio: 1,
                     crop: function(e) {
-                        // Output the result data for cropping image.
                         object.x = e.x;
                         object.y = e.y;
                         object.width = e.width;
@@ -597,10 +596,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         $.each(object,function (k,v) {
             newSaveData.append(k,v);
-        })
-
-
-
+        });
 
         $.ajax({
             url: '/uploadUserPhoto' ,
@@ -608,8 +604,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             processData: false,
             contentType: false,
             success: function(data){
-
-
+                $('.profile-user-img').removeClass('cropper-hidden');
+                $('.img-circle').attr('src', data + "?timestamp=" + new Date().getTime());
+                $('.user-image').attr('src', data + "?timestamp=" + new Date().getTime());
+                $('.cropper-container').remove();
+                $('input[type=file]').val('');
             },
             data : newSaveData
         });

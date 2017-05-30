@@ -22,7 +22,7 @@
                         @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                         <img class="profile-user-img img-responsive img-circle" src="{{asset('uploads/users/profile')
                             . '/' . Auth::user()->company_id . '/' . Auth::user()->id . '/'
-                            . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                            . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                              alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                         @else
                             <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"

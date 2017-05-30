@@ -6,6 +6,7 @@ use App\CompanyInfo;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -259,7 +260,7 @@ class AddNewUserController extends Controller
                     ->where('id', Auth::user()->id)
                     ->update(['profile_img' => $image_name]);
 
-                echo 'success';
+                echo sprintf($logoDirectoryPath . '%s', $image_name);
                 exit;
                 //return redirect()->back()->with('status', 'Profile updated!');
             }
