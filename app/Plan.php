@@ -18,12 +18,17 @@ class Plan extends Model
     public static $plan = null;
 
     public static function getPlan($id){
-        $plan = Plan::where('company_id', $id)->select('type')->get()->first();
-        if(!is_null($plan)){
-            return $plan->type;
+        if(is_null(self::$plan)){
+            $plan = Plan::where('company_id', $id)->select('type')->get()->first();
+            if(!is_null($plan)){
+                return $plan->type;
+            }
+            return 1;
         }
-       return 1;
+
+       return self::$plan;
     }
+
 
     public static function setPlan(){
         if( is_null(Plan::$plan)){
@@ -32,15 +37,11 @@ class Plan extends Model
     }
 
     public static function checkPlan($plan_type){
-        if(is_array($plan_type)){
-            if(!in_array(self::$plan, $plan_type)){
-                return false;
-            }
-        }
-        else {
-            if($plan_type !== self::$plan){
-                return false;
-            }
+
+        if(!is_array($plan_type)) $plan_type[] = $plan_type;
+
+        if(!in_array(self::getPlan(Auth::user()->id), $plan_type)){
+            return false;
         }
         return true;
     }

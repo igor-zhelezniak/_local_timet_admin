@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CompanyInfo;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -153,6 +154,8 @@ class AddNewUserController extends Controller
         if(Auth::user()->hasRole(1)){
             $timezones = DB::table('timezones')->pluck('timezone', 'id');
             $company = CompanyInfo::findOrFail(Auth::user()->company_id);
+            $user = User::findOrFail(Auth::user()->id);
+
             $nominals = [
                 '1.15 = час и 15 минут',
                 '1:15 = час и 15 минут'
@@ -169,6 +172,7 @@ class AddNewUserController extends Controller
                 /*->with('countries', $this->getCountriesList())*/
                 ->with('timezones', $timezones)
                 ->with('company', $company)
+                ->with('user', $user)
                 ->with('cities', $cities)
                 ->with('nominals', $nominals);
         }

@@ -27,6 +27,8 @@ Route::post('/addNewRecord', 'TimeSheetsController@addNewRecord');
 Route::post('/deleteRecord', 'TimeSheetsController@deleteRecord');
 
 
+//Route::get('/projects', 'ProjectController@showProjects')->middleware('plan:3'); // for checking user plan
+
 Route::get('/projects', 'ProjectController@showProjects');
 Route::get('/projects/add', 'ProjectController@addProject');
 Route::post('/projects/saveProject', 'ProjectController@saveProject');

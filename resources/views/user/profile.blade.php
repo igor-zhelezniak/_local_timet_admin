@@ -373,14 +373,14 @@
                                     <label for="inputName" class="col-sm-2 control-label">Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputName" placeholder="Name" name="inputName">
+                                        <input type="text" class="form-control" id="inputName" value="{{ $user->name }}" placeholder="Name" name="inputName">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail" class="col-sm-2 control-label">Email</label>
 
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="inputEmail">
+                                        <input type="email" class="form-control" id="inputEmail" value="{{ $user->email }}" placeholder="Email" name="inputEmail">
                                     </div>
                                 </div>
                                 <div class="form-group">

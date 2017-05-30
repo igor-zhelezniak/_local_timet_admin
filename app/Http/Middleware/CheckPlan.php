@@ -14,9 +14,12 @@ class CheckPlan
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $plan_type)
+    public function handle($request, Closure $next, ...$plan_type)
     {
-        dd($plan_type);
+        if(!Plan::checkPlan($plan_type)){
+            return redirect()->back();
+        }
         return $next($request);
+
     }
 }
