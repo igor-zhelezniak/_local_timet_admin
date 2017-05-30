@@ -7,6 +7,8 @@
  */
 
 namespace App\Http\Controllers;
+use App\Plan;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -18,12 +20,18 @@ class AuthorizationController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            Plan::setPlan();
+            return $next($request);
+        });
 
         $res = DB::table('roles')->get();
 
         foreach($res as $val){
             $this->roles[$val->role_name] = $val->id;
         }
+
+
     }
 
     public function getCompanyName(){
