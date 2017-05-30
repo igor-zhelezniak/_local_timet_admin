@@ -160,13 +160,13 @@ class AddNewUserController extends Controller
 
             $cities = [];
 
-            if(!is_null($company->country)){
+           /* if(!is_null($company->country)){
                 $cities = $this->getCityByCountry($company->country);
-            }
+            }*/
 
 
             return view('user/profile')
-                ->with('countries', $this->getCountriesList())
+                /*->with('countries', $this->getCountriesList())*/
                 ->with('timezones', $timezones)
                 ->with('company', $company)
                 ->with('cities', $cities)
