@@ -59,6 +59,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.0/jquery-migrate.js"></script>
     <script src="{{ asset("/js/app.js") }}"></script>
 
+    <script src="/js/cropper.js"></script>
+    <link  href="/css/cropper.css" rel="stylesheet">
+
     <!-- Bootstrap 3.3.6 -->
     <script src="{{ asset("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
 
@@ -215,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- The user image in the navbar-->
                             @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                                 <img src="{{asset('uploads/users/profile') . '/' . Auth::user()->company_id . '/'
-                                . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                                . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                                      class="user-image" alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                             @else
                                 <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"
@@ -230,7 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <li class="user-header">
                                 @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                                 <img src="{{asset('uploads/users/profile') . '/' . Auth::user()->company_id . '/'
-                                    . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                                    . Auth::user()->id . '/' . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                                      class="img-circle" alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                                 @else
                                     <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"
@@ -519,6 +522,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $('.box-body').html(wrapTag('Empty', 'div'));
     }
 
+    function readURL(input,call) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-user-img').attr('src', e.target.result);
+                call();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var object = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        rotate: 0,
+        scaleX: 0,
+        scaleY: 0
+    };
+
     $(function(){
         $('.ajax [data-toggle="tab"]').click(function(e) {
             var $this = $(this),
@@ -532,7 +559,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $this.tab('show');
             return false;
         });
+
+
+        $('#userPhoto').on('submit', setImg);
+
+
+        $('input[name=userProfileFile]').on('change', function () {
+
+            readURL(this,function () {
+                $('.profile-user-img').cropper({
+                    aspectRatio: 1,
+                    crop: function(e) {
+                        object.x = e.x;
+                        object.y = e.y;
+                        object.width = e.width;
+                        object.height = e.height;
+                        object.rotate = e.rotate;
+                        object.scaleX = e.scaleX;
+                        object.scaleY = e.scaleY;
+                    }
+                });
+
+            });
+        });
     });
+
+    function setImg () {
+        var newSaveData = new FormData();
+
+
+       $('input[type=file]').each(function(key, value){
+            if(value.files[0]){
+                newSaveData.append('user_photo',value.files[0]);
+            }
+        });
+
+        $.each(object,function (k,v) {
+            newSaveData.append(k,v);
+        });
+
+        $.ajax({
+            url: '/uploadUserPhoto' ,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            success: function(data){
+                $('.profile-user-img').removeClass('cropper-hidden');
+                $('.img-circle').attr('src', data + "?timestamp=" + new Date().getTime());
+                $('.user-image').attr('src', data + "?timestamp=" + new Date().getTime());
+                $('.cropper-container').remove();
+                $('input[type=file]').val('');
+            },
+            data : newSaveData
+        });
+
+        return false;
+    }
 
 </script>
 

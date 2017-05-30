@@ -22,7 +22,7 @@
                         @if(!empty(UserInfo::getUserProfilePhoto(Auth::user()->id)))
                         <img class="profile-user-img img-responsive img-circle" src="{{asset('uploads/users/profile')
                             . '/' . Auth::user()->company_id . '/' . Auth::user()->id . '/'
-                            . UserInfo::getUserProfilePhoto(Auth::user()->id)}}"
+                            . UserInfo::getUserProfilePhoto(Auth::user()->id)}}?{{ rand() }}"
                              alt="{{UserInfo::getUserName(Auth::user()->id)}}">
                         @else
                             <img src="{{asset('uploads/users/profile/no-profile-photo.png')}}"
@@ -47,7 +47,7 @@
                                 </li>
                             </ul>
                         --}}
-                        {!! Form::open(['url' => 'uploadUserPhoto', 'files'=>true]) !!}
+                        {!! Form::open(['url' => 'uploadUserPhoto', 'files'=>true, 'id' => 'userPhoto']) !!}
                         {{ Form::hidden('userId', Auth::user()->id) }}
                         <div class="row">
                             <div class="col-md-6">
@@ -542,6 +542,24 @@
         <!-- /.row -->
 
     </section>
+    <div id="imageResize" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Image resize</h4>
+                </div>
+                <div class="modal-body">
+                    <img id="image" src="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <script>
 
         function ajaxGetCityByCountry() {

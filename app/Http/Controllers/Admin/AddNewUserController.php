@@ -6,6 +6,7 @@ use App\CompanyInfo;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -242,8 +243,8 @@ class AddNewUserController extends Controller
 
     public function uploadUserPhoto(Request $request)
     {
-
-        $logoDirectoryPath = 'uploads/users/profile/' . Auth::user()->company_id . '/' . $request->userId . '/';
+        //dd($request->all());
+        $logoDirectoryPath = 'uploads/users/profile/' . Auth::user()->company_id . '/' . Auth::user()->id . '/';
         $companyLogoName = 'profile-image.';
 
         $userInfo = DB::table('users')
@@ -251,22 +252,26 @@ class AddNewUserController extends Controller
             ->first();
 
         if($request->isMethod('post')){
-            if ($request->hasFile('userProfileFile')) {
-                $file = $request->file('userProfileFile');
+            if ($request->hasFile('user_photo')) {
+                $file = $request->file('user_photo');
                 $extension = $file->getClientOriginalExtension();
                 $image_name = $companyLogoName . $extension;
 
                 $file->move($logoDirectoryPath, $image_name);
-                Image::make(sprintf($logoDirectoryPath . '%s', $image_name))->resize(200, 200)->save();
+                Image::make(sprintf($logoDirectoryPath . '%s', $image_name))->crop((int)$request->width,
+                    (int)$request->height, (int)$request->x, (int)$request->y)->/*resize(200, 200)->*/save();
 
                 DB::table('users')
-                    ->where('id', $request->userId)
+                    ->where('id', Auth::user()->id)
                     ->update(['profile_img' => $image_name]);
 
-                return redirect()->back()->with('status', 'Profile updated!');
+                echo sprintf($logoDirectoryPath . '%s', $image_name);
+                exit;
+                //return redirect()->back()->with('status', 'Profile updated!');
             }
         }
-        return redirect()->action('Admin\AddNewUserController@showUsers');
+        exit;
+        //return redirect()->action('Admin\AddNewUserController@showUsers');
     }
 
 
