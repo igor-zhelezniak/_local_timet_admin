@@ -159,6 +159,7 @@ class AddNewUserController extends Controller
             ];
 
             $cities = [];
+
             if(!is_null($company->country)){
                 $cities = $this->getCityByCountry($company->country);
             }

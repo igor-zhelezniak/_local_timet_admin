@@ -13,13 +13,7 @@ class CompanyInfo extends Model
         'name', 'code', 'url','description', 'country', 'city', 'adress', 'timezone', 'phone_number', 'companyLogo', 'nominal'
     ];
 
-    protected $rules = [
-        'country' => 'required',
-        'city' => 'required',
-        'timezone' => 'required',
-        'adress' => 'required',
-        'phone_number' => 'required'
-    ];
+    protected $rules = [];
 
     private $errors;
 

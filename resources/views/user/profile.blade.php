@@ -503,7 +503,7 @@
                                         <label for="inputSkills" class="col-sm-2 control-label">Phone Number</label>
 
                                         <div class="col-sm-10">
-                                            <input type="number" class="form-control" value="{{ $company->phone_number }}" placeholder="Phone number" name="phone_number" required>
+                                            <input type="text" class="form-control" value="{{ $company->phone_number }}" placeholder="Phone number" name="phone_number" required>
                                         </div>
                                     </div>
 
@@ -519,7 +519,22 @@
                                         <label for="inputSkills" class="col-sm-2 control-label">Nominal</label>
 
                                         <div class="col-sm-10">
-                                            {{ Form::select('nominal', [null => 'Select Nominal'] + $nominals, $company->nominal, ['class' => 'form-control']) }}
+                                            <div class="radio">
+                                                <label><input type="radio" value="1" {{ $company->nominal == 1 ? 'checked' : '' }} name="nominal">Decimal Notation</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    Select this if you want (for instance) <strong>one hour and fifteen minutes</strong> presented as <strong>1.25</strong>
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="2" {{ $company->nominal == 2 ? 'checked' : '' }} name="nominal">Hour Notation</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    Select this if you want (for instance) <strong>one hour and fifteen minutes</strong> presented as <strong>1:25</strong>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
 
