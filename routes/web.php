@@ -85,3 +85,5 @@ Route::get('/ajaxGetClients/{status}', 'Admin\CustomerController@ajaxGetClients'
 Route::get('/ajaxGetProjects/{status}', 'ProjectController@ajaxGetProjects');
 
 Route::get('/ajaxGetCity/{code}', 'Admin\AddNewUserController@ajaxGetCity');
+
+Route::post('/ajaxSendEmail', 'SendMailController@sendMail');
