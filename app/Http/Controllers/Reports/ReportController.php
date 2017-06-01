@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthorizationController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -125,13 +126,31 @@ class ReportController extends AuthorizationController
         switch ($response_type){
             case 'json': return response()->json(['result' => $result->get()]); break;
             case 'excel':
-                return $this->exportToExcelFile($result);
+                return $this->exportToExcelFile($result, 'xlsx');
+                break;
+            case 'pdf':
+                return $this->exportToPdfFile($result);
                 break;
         }
 
     }
 
-    private function exportToExcelFile($data){
+    private function exportToPdfFile($data){
+
+       $data->select('logged_date', 'users.name as userName', 'projects.project_name as projectName',
+           'categories.name as categoryName', 'timesheet.description', 'worked_time');
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML((string) view('pdf.pdf', ['data' => $data->get()]));
+
+        $response =  array(
+            'name' => "TimetReport.pdf",
+            'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,".base64_encode($pdf->stream())
+        );
+        return response()->json($response);
+    }
+
+    private function exportToExcelFile($data, $format){
 
         $data->select('logged_date', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName', 'timesheet.description', 'worked_time');
 
@@ -154,10 +173,10 @@ class ReportController extends AuthorizationController
 
         });
 
-        $file = $file->string('xlsx');
+        $file = $file->string($format);
 
         $response =  array(
-            'name' => "TimetReport.xlsx",
+            'name' => "TimetReport." . $format,
             'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,".base64_encode($file)
         );
         return response()->json($response);
