@@ -166,6 +166,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -238,7 +239,8 @@ return [
         /*Custom*/
         'Statuses'  => App\Helpers\StatusHelper::class,
         'UserInfo'  => App\Helpers\UserInfoHelper::class,
-        'Input' => Illuminate\Support\Facades\Input::class
+        'Input' => Illuminate\Support\Facades\Input::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

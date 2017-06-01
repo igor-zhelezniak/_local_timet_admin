@@ -94,6 +94,7 @@
                     <div class="col-md-6">
                         <label for=""></label>
                         <div class="text-right">
+                            <button class="btn btn-info" id="exportToExcel" type="button">Export to Excel</button>
                             <button class="btn btn-success" id="showReportsResult" type="button">Show</button>
                         </div>
                     </div>
@@ -133,6 +134,19 @@
                                 defaultDate: new Date()
                             });
 
+                            $('#exportToExcel').click(function(){
+                                var selectReportForm = $('#selectReportForm').serialize();
+                                $.post('/showReportResult/excel', selectReportForm, function(response){
+                                    var a = document.createElement("a");
+                                    a.href = response.file;
+                                    a.download = response.name;
+                                    a.classList.add('excelLink');
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                });
+                            });
+
                             $('#showReportsResult').click(function () {
 
                                 if(!$(this).hasClass('block')){
@@ -142,7 +156,7 @@
                                     $('#reportResultTable tfoot tr td').empty();
                                     totalTimeCount.count = 0;
                                     var selectReportForm = $('#selectReportForm').serialize();
-                                    $.post('/showReportResult', selectReportForm, function (data) {
+                                    $.post('/showReportResult/json', selectReportForm, function (data) {
 
                                         var html = '';
 

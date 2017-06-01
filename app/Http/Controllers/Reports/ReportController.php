@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends AuthorizationController
 {
@@ -73,10 +74,7 @@ class ReportController extends AuthorizationController
         ]);
     }
 
-    public function showReportResult(Request $request){
-        //var_dump($request->all());
-
-
+    public function showReportResult(Request $request, $response_type){
         if(empty($request->dateFrom)){
             $request->dateFrom = date('Y-d-m');
         }
@@ -84,7 +82,6 @@ class ReportController extends AuthorizationController
         if(empty($request->dateTo)){
             $request->dateTo = date('Y-d-m');
         }
-
 
 
         $result = DB::table('timesheet')
@@ -125,6 +122,45 @@ class ReportController extends AuthorizationController
 
         $result->orderBy('timesheet.logged_date');
 
-        return response()->json(['result' => $result->get()]);
+        switch ($response_type){
+            case 'json': return response()->json(['result' => $result->get()]); break;
+            case 'excel':
+                return $this->exportToExcelFile($result);
+                break;
+        }
+
+    }
+
+    private function exportToExcelFile($data){
+
+        $data->select('logged_date', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName', 'timesheet.description', 'worked_time');
+
+        $result_array[] = ['Date', 'Name','Project','Cetegories','Description', 'Time'];
+
+        foreach ($data->get() as $item) {
+            $result_array[] = (array)$item;
+        }
+
+        $file = Excel::create('Report', function($excel) use ($result_array){
+
+            $excel->setTitle('Report');
+            $excel->setCreator('Timet')->setCompany('Timet');
+            $excel->setDescription('report file');
+
+
+            $excel->sheet('sheet1', function($sheet) use ($result_array) {
+                $sheet->fromArray($result_array, null, 'A1', false, false);
+            });
+
+        });
+
+        $file = $file->string('xlsx');
+
+        $response =  array(
+            'name' => "TimetReport.xlsx",
+            'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,".base64_encode($file)
+        );
+        return response()->json($response);
+
     }
 }
