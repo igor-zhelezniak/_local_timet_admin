@@ -108,6 +108,9 @@
                                 var h = sec/3600 ^ 0 ;
                                 var m = (sec-h*3600)/60 ^ 0 ;
                                 var s = sec-h*3600-m*60 ;
+                                if(timeNotation == 'decimal'){
+                                    return (h + (m / 60) + (s / 3600)).toFixed(2);
+                                }
                                 return ((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));/*+" мин. "+(s<10?"0"+s:s)+" сек.")*/
 
                             }
