@@ -94,8 +94,9 @@
                     <div class="col-md-6">
                         <label for=""></label>
                         <div class="text-right">
+                            <button class="btn btn-primary" id="exportToPdf" type="button">Export to Pdf</button>
                             <button class="btn btn-info" id="exportToExcel" type="button">Export to Excel</button>
-                            <button class="btn btn-success" id="showReportsResult" type="button">Show</button>
+                            <button class="btn btn-success col-md-offset-1" id="showReportsResult" type="button">Show</button>
                         </div>
                     </div>
                 </div>
@@ -119,6 +120,16 @@
 
                         var timeNotation = "<?= is_null($nominal) ? 'hour' : $nominal ?>";
 
+                        function saveFile(response){
+                            var a = document.createElement("a");
+                            a.href = response.file;
+                            a.download = response.name;
+                            a.classList.add('excelLink');
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                        }
+
                         $(function () {
 
                             var myDate = new Date();
@@ -137,13 +148,14 @@
                             $('#exportToExcel').click(function(){
                                 var selectReportForm = $('#selectReportForm').serialize();
                                 $.post('/showReportResult/excel', selectReportForm, function(response){
-                                    var a = document.createElement("a");
-                                    a.href = response.file;
-                                    a.download = response.name;
-                                    a.classList.add('excelLink');
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    a.remove();
+                                    saveFile(response);
+                                });
+                            });
+
+                            $('#exportToPdf').click(function(){
+                                var selectReportForm = $('#selectReportForm').serialize();
+                                $.post('/showReportResult/pdf', selectReportForm, function(response){
+                                    saveFile(response);
                                 });
                             });
 
