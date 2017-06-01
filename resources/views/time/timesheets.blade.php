@@ -4,7 +4,8 @@
 @section('content')
 	<script>
 
-		var projectName = <?php echo json_encode($projects); ?>
+		var projectName = <?php echo json_encode($projects); ?>;
+		var timeNotation = "<?= $nominal ?>";
 
 		var categoryName = <?php  echo json_encode($categories); ?>
 
@@ -55,13 +56,13 @@
 			data.description = $rowToSave.find('input[name=description]').val();
 			data.workedTime = $rowToSave.find('input[name=workedTime]').val();
 
-            data.workedTime = prettyTime(data.workedTime, 'hour', true);
+            data.workedTime = prettyTime(data.workedTime, true);
 
 			return data;
 
 		}
 
-        function prettyTime(time, timeNotation, showZero) {
+        function prettyTime(time, showZero) {
             time = time.toString().replace(/,/g, '.').replace(/;/g, ':');
             if (time != '') {
                 if (timeNotation == 'decimal') {
@@ -185,7 +186,7 @@
 
 		function formatTimeAfterReload(){
             $('input[name=workedTime]').each(function (key, val) {
-                $(this).val(prettyTime($(this).val(), 'hour', true));
+                $(this).val(prettyTime($(this).val(), true));
             });
 		}
 	</script>

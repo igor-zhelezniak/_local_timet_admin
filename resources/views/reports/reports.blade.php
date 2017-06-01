@@ -111,7 +111,9 @@
                                 return ((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));/*+" мин. "+(s<10?"0"+s:s)+" сек.")*/
 
                             }
-                        };
+                        }
+
+                        var timeNotation = "<?= $nominal ?>";
 
                         $(function () {
 
@@ -150,7 +152,7 @@
                                                 "<td>" + value.projectName + "</td>" +
                                                 "<td>" + value.categoryName + "</td>" +
                                                 "<td>" + value.description + "</td>" +
-                                                "<td>" + prettyTime(value.worked_time, 'hour', true) + "</td>" +
+                                                "<td>" + prettyTime(value.worked_time, true) + "</td>" +
                                                 "</tr>";
                                             sumTime(value.worked_time);
                                         });
@@ -190,7 +192,7 @@
 
                         }
 
-                        function prettyTime(time, timeNotation, showZero) {
+                        function prettyTime(time, showZero) {
                             time = time.toString().replace(/,/g, '.').replace(/;/g, ':');
                             if (time != '') {
                                 if (timeNotation == 'decimal') {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Categories;
+use App\CompanyInfo;
 use Illuminate\Http\Request;
 
 
@@ -19,9 +21,6 @@ class TimeSheetsController extends Controller
 
     public function showTimeSheets()
     {
-
-
-
         $projects = DB::table('projects')
             ->select('projects.id', 'projects.project_name as name')
             ->join('projects_users', 'projects_users.project_id', '=', 'projects.id')
@@ -34,7 +33,13 @@ class TimeSheetsController extends Controller
             ->where('categories_users.company_id', Auth::user()->company_id)
             ->get();
 
-        return view('/time/timesheets', ['projects' => $projects, 'categories' => $categories]);
+        $time_nominal = CompanyInfo::where('id', Auth::user()->company_id)->select('nominal')->first();
+        switch ($time_nominal->nominal){
+            case 1: $time_nominal = 'decimal'; break;
+            case 2: $time_nominal = 'hour'; break;
+        }
+
+        return view('/time/timesheets', ['projects' => $projects, 'categories' => $categories, 'nominal' => $time_nominal]);
     }
 
     public function getCalendarDate(Request $request){

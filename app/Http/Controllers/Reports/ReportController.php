@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\CompanyInfo;
 use App\Http\Controllers\AuthorizationController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -55,6 +56,12 @@ class ReportController extends AuthorizationController
             ->where('user_id', Auth::user()->id)
             ->get();
 
+        $time_nominal = CompanyInfo::where('id', Auth::user()->company_id)->select('nominal')->first();
+        switch ($time_nominal->nominal){
+            case 1: $time_nominal = 'decimal'; break;
+            case 2: $time_nominal = 'hour'; break;
+        }
+
 
         return view('/reports/reports', [
             'timesheet'=>$timesheet,
@@ -62,6 +69,7 @@ class ReportController extends AuthorizationController
             'customers' => $customers->get(),
             'projects' => $projects->get(),
             'categories' => $categories->get(),
+            'nominal' => $time_nominal,
         ]);
     }
 
