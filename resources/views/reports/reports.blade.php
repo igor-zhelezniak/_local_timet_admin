@@ -117,7 +117,7 @@
                             }
                         }
 
-                        var timeNotation = "<?= $nominal ?>";
+                        var timeNotation = "<?= is_null($nominal) ? 'hour' : $nominal ?>";
 
                         $(function () {
 

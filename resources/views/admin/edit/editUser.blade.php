@@ -59,7 +59,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input name="uPassword" type="password" value="" class="form-control" required>
+                                    <input name="uPassword" type="password" value="" class="form-control">
                                 </div>
                             </div>
                         </div>

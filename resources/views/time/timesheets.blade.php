@@ -5,7 +5,7 @@
 	<script>
 
 		var projectName = <?php echo json_encode($projects); ?>;
-		var timeNotation = "<?= $nominal ?>";
+        var timeNotation = "<?= is_null($nominal) ? 'hour' : $nominal ?>";
 
 		var categoryName = <?php  echo json_encode($categories); ?>
 
