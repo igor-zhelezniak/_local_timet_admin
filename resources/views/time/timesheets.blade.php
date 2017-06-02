@@ -62,7 +62,6 @@
 		}
 
         function prettyTime(time, showZero) {
-            time = time.toString().replace(/,/g, '.').replace(/;/g, ':');
             if (time != '') {
                 if (timeNotation == 'decimal') {
                     if (time == "0") {
@@ -155,14 +154,24 @@
             return time;
         }
 
-		function saveData(dataSave){
+		function saveData(dataSave, call){
+
 		    if(timeNotation == 'decimal'){
-                dataSave.workedTime = dataSave.workedTime.replace('.', ':');
+
+                timeNotation = 'hour';
+                dataSave.workedTime = prettyTime(dataSave.workedTime, true);
+                timeNotation = 'decimal';
+
 			}
 
 			$.post('/getDataToSave', dataSave, function(data){
 				if(data.result){
 					console.log("TRUE");
+                    dataSave.workedTime = prettyTime(dataSave.workedTime, true);
+                    if(call){
+                        call();
+                    }
+
 				}
 			});
 		}
@@ -229,10 +238,13 @@
 
 			$(document).on('blur', "input", function(){
 				var resData = getDataToSave($(this).parents('tr'));
-			    saveData(resData);
-			    if($(this).hasClass('renderDataTime')){
-                    $(this).val(resData.workedTime);
-				}
+				var $root = $(this);
+			    saveData(resData, function () {
+                    if($root.hasClass('renderDataTime')){
+                        $root.val(resData.workedTime);
+                    }
+                });
+
 
 			});
 
