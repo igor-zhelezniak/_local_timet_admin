@@ -57,7 +57,6 @@
 			data.workedTime = $rowToSave.find('input[name=workedTime]').val();
 
             data.workedTime = prettyTime(data.workedTime, true);
-
 			return data;
 
 		}
@@ -157,6 +156,10 @@
         }
 
 		function saveData(dataSave){
+		    if(timeNotation == 'decimal'){
+                dataSave.workedTime = dataSave.workedTime.replace('.', ':');
+			}
+
 			$.post('/getDataToSave', dataSave, function(data){
 				if(data.result){
 					console.log("TRUE");
