@@ -23,7 +23,7 @@
         text-align: center;
     }
 </style>
-<h3>Results Table</h3>
+<h3>Timesheets report</h3>
 <table>
     <thead>
     <tr>

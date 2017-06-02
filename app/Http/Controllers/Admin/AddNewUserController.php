@@ -126,11 +126,11 @@ class AddNewUserController extends Controller
             if($user->validate($request->all())) {
                 $new_user_id = DB::table('users')->insertGetId(
                     [
-                        'name' => $request->uName,
+                        'name' => $request->name,
                         'email' => $request->email,
-                        'password' => bcrypt($request->uPassword),
-                        'role' => $request->uRole,
-                        'status' => $request->uStatus,
+                        'password' => bcrypt($request->password),
+                        'role' => $request->role,
+                        'status' => $request->status,
                         'user_parent' => Auth::user()->id,
                         'company_id' => Auth::user()->company_id,
                     ]
@@ -138,7 +138,7 @@ class AddNewUserController extends Controller
 
                 DB::table('users_departments')->insert(
                     [
-                        'department_id' => $request->uDepartment,
+                        'department_id' => $request->department,
                         'user_id' => $new_user_id,
                     ]
                 );
@@ -146,7 +146,7 @@ class AddNewUserController extends Controller
                 DB::table('users_roles')->insert(
                     [
                         'user_id' => $new_user_id,
-                        'role_id' => $request->uRole,
+                        'role_id' => $request->role,
                     ]
                 );
                 return redirect()->action('Admin\AddNewUserController@showUsers');

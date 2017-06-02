@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label>Name</label>
                             {{--<input name="uName" type="text" value="" class="form-control" autofocus required>--}}
-                            {{ Form::text('uName', '', ['class' => 'form-control', 'required', 'autofocus']) }}
+                            {{ Form::text('name', '', ['class' => 'form-control', 'required', 'autofocus']) }}
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label>Password</label>
                             {{--<input name="uPassword" type="password" value="" class="form-control" required>--}}
-                            {{ Form::password('uPassword', ['class' => 'form-control', 'required']) }}
+                            {{ Form::password('password', ['class' => 'form-control', 'required']) }}
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Department</label>
-                            <select name="uDepartment" class="form-control">
+                            <select name="department" class="form-control">
                                 @foreach($departments as $department)
                                     <option value="{{$department->department_id}}">{{$department->department_name}}</option>
                                 @endforeach
@@ -48,7 +48,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Role</label>
-                            <select name="uRole" class="form-control">
+                            <select name="role" class="form-control">
                                 @foreach($roles as $role)
                                     <option value="{{$role->id}}">{{$role->role_name}}</option>
                                 @endforeach
@@ -58,7 +58,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Status</label>
-                            <select name="uStatus" class="form-control">
+                            <select name="status" class="form-control">
                                 @foreach($status as $user_status)
                                     <option value="{{$user_status->id}}">{{$user_status->status_name}}</option>
                                 @endforeach

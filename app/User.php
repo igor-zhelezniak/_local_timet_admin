@@ -31,12 +31,12 @@ class User extends Authenticatable
     ];
 
     protected $rules = [
-        'uName' => 'required',
+        'name' => 'required',
         'email' => 'required|unique:users|max:255',
-        'uPassword' => 'required|between:6,8',
-        'uDepartment' => 'required|integer',
-        'uRole' => 'required|integer',
-        'uStatus' => 'required|integer',
+        'password' => 'required|between:6,8',
+        'department' => 'required|integer',
+        'role' => 'required|integer',
+        'status' => 'required|integer',
     ];
 
     private $errors;
