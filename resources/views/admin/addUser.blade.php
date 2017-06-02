@@ -3,25 +3,33 @@
 @section('content')
     <div class="container">
         <div class="row">
+            @if($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-error">{{ $error }}</div>
+                @endforeach
+            @endif
             <form action="{{ url('/admin/saveUser') }}" method="post">
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Name</label>
-                            <input name="uName" type="text" value="" class="form-control" autofocus required>
+                            {{--<input name="uName" type="text" value="" class="form-control" autofocus required>--}}
+                            {{ Form::text('uName', '', ['class' => 'form-control', 'required', 'autofocus']) }}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Email</label>
-                            <input name="uEmail" type="email" value="" class="form-control" required>
+                            {{--<input name="email" type="email" value="" class="form-control" required>--}}
+                            {{ Form::email('email', null, ['class' => 'form-control', 'required']) }}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Password</label>
-                            <input name="uPassword" type="password" value="" class="form-control" required>
+                            {{--<input name="uPassword" type="password" value="" class="form-control" required>--}}
+                            {{ Form::password('uPassword', ['class' => 'form-control', 'required']) }}
                         </div>
                     </div>
                 </div>

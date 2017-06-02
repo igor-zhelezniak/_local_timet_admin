@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\Facades\Input;
@@ -120,32 +121,41 @@ class AddNewUserController extends Controller
 
         if(Auth::user()->hasRole(1) || Auth::user()->hasRole(2)) {
 
-            $new_user_id = DB::table('users')->insertGetId(
-                [
-                    'name' => $request->uName,
-                    'email' => $request->uEmail,
-                    'password' => bcrypt($request->uPassword),
-                    'role' => $request->uRole,
-                    'status' => $request->uStatus,
-                    'user_parent' => Auth::user()->id,
-                    'company_id' => Auth::user()->company_id,
-                ]
-            );
+            $user = new User;
 
-            DB::table('users_departments')->insert(
-                [
-                    'department_id' => $request->uDepartment,
-                    'user_id' => $new_user_id,
-                ]
-            );
+            if($user->validate($request->all())) {
+                $new_user_id = DB::table('users')->insertGetId(
+                    [
+                        'name' => $request->uName,
+                        'email' => $request->email,
+                        'password' => bcrypt($request->uPassword),
+                        'role' => $request->uRole,
+                        'status' => $request->uStatus,
+                        'user_parent' => Auth::user()->id,
+                        'company_id' => Auth::user()->company_id,
+                    ]
+                );
 
-            DB::table('users_roles')->insert(
-                [
-                    'user_id' => $new_user_id,
-                    'role_id' => $request->uRole,
-                ]
-            );
-            return redirect()->action('Admin\AddNewUserController@showUsers');
+                DB::table('users_departments')->insert(
+                    [
+                        'department_id' => $request->uDepartment,
+                        'user_id' => $new_user_id,
+                    ]
+                );
+
+                DB::table('users_roles')->insert(
+                    [
+                        'user_id' => $new_user_id,
+                        'role_id' => $request->uRole,
+                    ]
+                );
+                return redirect()->action('Admin\AddNewUserController@showUsers');
+            }
+            else {
+                return Redirect::back()
+                    ->withErrors($user->errors())
+                    ->withInput();
+            }
         }
         return view('404');
     }
