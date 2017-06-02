@@ -87,3 +87,8 @@ Route::get('/ajaxGetProjects/{status}', 'ProjectController@ajaxGetProjects');
 Route::get('/ajaxGetCity/{code}', 'Admin\AddNewUserController@ajaxGetCity');
 
 Route::post('/ajaxSendEmail', 'SendMailController@sendMail');
+
+Route::get('/invoice', 'Admin\InvoiceController@index');
+Route::post('/ajaxGetProjects/{customer_id}', 'Admin\InvoiceController@ajaxGetProjects');
+Route::post('/ajaxGetInvoice', 'Admin\InvoiceController@ajaxGetInvoice');
+Route::post('/ajaxCreateInvoice', 'Admin\InvoiceController@ajaxCreateInvoice');
