@@ -35,9 +35,11 @@
             <li {{Statuses::isActiveMenuItem('admin/showCategories') ? 'class=active' : ''}}><a href="{{url('/admin/showCategories')}}"><i class="fa fa-folder"></i><span>Categories</span></a></li>
             <li {{Statuses::isActiveMenuItem('admin/showClients') ? 'class=active' : ''}}><a href="{{url('/admin/showClients')}}"><i class="fa fa-diamond"></i><span>Clients</span></a></li>
         @endif
-        <li><a href="{{url('/reports')}}"><i class="fa fa-pie-chart"></i><span>Reports</span></a></li>
-        @if(Auth::user()->hasRole(1))
+        {{--<li><a href="{{url('/reports')}}"><i class="fa fa-pie-chart"></i><span>Reports</span></a></li>--}}
+        <li {{Statuses::isActiveMenuItem('reports') ? 'class=active' : ''}}><a href="{{url('/reports')}}"><i class="fa fa-pie-chart"></i><span>Reports</span></a></li>
+
+        {{--@if(Auth::user()->hasRole(1))
             <li {{Statuses::isActiveMenuItem('invoice') ? 'class=active' : ''}}><a href="{{url('/invoice')}}"><i class="fa fa-briefcase"></i><span>Invoice</span></a></li>
-        @endif
+        @endif--}}
     </ul>
 @endif

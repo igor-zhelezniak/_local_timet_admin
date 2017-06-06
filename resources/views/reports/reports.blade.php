@@ -69,7 +69,17 @@
 
 
                 <div class="row">
+
                     <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Group By</label>
+
+                            {{ Form::select('groupBy', $groupBy, null, ['class' => 'form-control']) }}
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
                             <div class="form-group">
                                 <label>From</label>
                                 <div class='input-group date datetimepickerFrom'>
@@ -80,7 +90,7 @@
                                 </div>
                             </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                             <div class="form-group">
                                 <label>To</label>
                                 <div class='input-group date datetimepickerTo'>
@@ -91,7 +101,7 @@
                                 </div>
                             </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label for=""></label>
                         <div class="text-right">
                             <button class="btn btn-primary" id="exportToPdf" type="button">Export to Pdf</button>
@@ -174,21 +184,40 @@
 
                                         var totalTimeCountHours = 0;
                                         var totalTimeCountMinutes = 0;
-                                        $.each(data.result,function(key, value){
 
-                                            html += "<tr><td>" + value.logged_date + "</td>" +
-                                                "<td>" + value.userName + "</td>" +
-                                                "<td>" + value.projectName + "</td>" +
-                                                "<td>" + value.categoryName + "</td>" +
-                                                "<td>" + value.description + "</td>" +
-                                                "<td>" + prettyTime(value.worked_time, true) + "</td>" +
-                                                "</tr>";
-                                            sumTime(value.worked_time);
-                                        });
+                                        if(data.groupBy){
+                                            createAdminTable(data, '.box-body', {
+                                                type: 'time',
+                                                label: 'total time',
+                                                index: 'time'
+                                            });
+                                        }
+                                        else {
 
-                                        $('#reportResultTable tbody').html(html);
+                                            createAdminTable(data, '.box-body', {
+                                                type: 'time',
+                                                label: 'total time',
+                                                index: 'worked_time'
+                                            });
 
-                                        if(data.result.length >= 1){
+                                            /*$.each(data.data,function(key, value){
+
+                                                html += "<tr><td>" + value.logged_date + "</td>" +
+                                                    "<td>" + value.userName + "</td>" +
+                                                    "<td>" + value.projectName + "</td>" +
+                                                    "<td>" + value.categoryName + "</td>" +
+                                                    "<td>" + value.description + "</td>" +
+                                                    "<td>" + prettyTime(value.worked_time, true) + "</td>" +
+                                                    "</tr>";
+                                                sumTime(value.worked_time);
+                                            });
+
+                                            $('#reportResultTable tbody').html(html);*/
+                                        }
+
+
+
+                                        if(data.data.length >= 1){
                                             $('#reportResultTable tfoot tr td').html('total <span>' + totalTimeCount.getTime() + '</span>');
 
                                         }
@@ -326,7 +355,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table class="table table-bordered" id="reportResultTable">
+                    {{--<table class="table table-bordered" id="reportResultTable">
                         <thead>
                         <tr>
                             <th>Date</th>
@@ -349,19 +378,11 @@
                             </td>
                         </tr>
                         </tfoot>
-                    </table>
+                    </table>--}}
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">»</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
+
     </div>
 @endsection

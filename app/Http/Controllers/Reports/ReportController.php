@@ -64,6 +64,11 @@ class ReportController extends AuthorizationController
             case 2: $time_nominal = 'hour'; break;
         }
 
+        $groupBy = [
+            null => 'Select Item',
+            1 => 'Users',
+        ];
+
 
         return view('/reports/reports', [
             'timesheet'=>$timesheet,
@@ -72,6 +77,7 @@ class ReportController extends AuthorizationController
             'projects' => $projects->get(),
             'categories' => $categories->get(),
             'nominal' => $time_nominal,
+            'groupBy' => $groupBy,
         ]);
     }
 
@@ -86,10 +92,10 @@ class ReportController extends AuthorizationController
 
 
         $result = DB::table('timesheet')
-            ->join('users', 'timesheet.user_id', '=', 'users.id')
-            ->join('projects', 'timesheet.project_id', '=', 'projects.id')
-            ->join('categories', 'timesheet.category_id', '=', 'categories.id')
-            ->join('clients', 'projects.project_customer', '=', 'clients.id');
+            ->leftJoin('users', 'timesheet.user_id', '=', 'users.id')
+            ->leftJoin('projects', 'timesheet.project_id', '=', 'projects.id')
+            ->leftJoin('categories', 'timesheet.category_id', '=', 'categories.id')
+            ->leftJoin('clients', 'projects.project_customer', '=', 'clients.id');
 
         $result->where('users.company_id', Auth::user()->company_id);
 
@@ -114,17 +120,37 @@ class ReportController extends AuthorizationController
         }
 
         if(!empty($request->customerName)) {
-            $result->where('clients.id', $request->customerName);
+
+            $result->where('clients.user_id', $request->customerName);
         }
 
         $result->whereBetween('timesheet.logged_date', array($request->dateFrom, $request->dateTo));
 
-        $result->select('timesheet.*', 'clients.name as clientName', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName');
+        /*$result->select('timesheet.*', 'clients.name as clientName', 'users.name as userName', 'projects.project_name as projectName',
+            'categories.name as categoryName');*/
+
+        $result->select('timesheet.logged_date', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName',
+            'timesheet.description', 'timesheet.worked_time');
+
+
+        $groupBy = false;
+        $titles = ['Date', 'Name', 'Project', 'Categories', 'Description', 'Time'];
+        if(!empty($request->groupBy)) {
+            $result->groupBy('timesheet.user_id');
+            $result->select('users.name as userName',  DB::raw('SEC_TO_TIME( SUM( TIME_TO_SEC( `worked_time` ) ) ) as time'));
+            $groupBy = true;
+            $titles = ['user_name', 'time'];
+        }
 
         $result->orderBy('timesheet.logged_date');
 
         switch ($response_type){
-            case 'json': return response()->json(['result' => $result->get()]); break;
+            case 'json': return response()->json([
+                'data' => $result->get(),
+                'titles' => $titles,
+                'status' => true,
+                'groupBy' => $groupBy
+            ]); break;
             case 'excel':
                 return $this->exportToExcelFile($result, 'xlsx');
                 break;

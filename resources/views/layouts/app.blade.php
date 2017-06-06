@@ -483,43 +483,213 @@ scratch. This page gets rid of all links and provides the needed markup only.
         return '<a href="' + links.edit + userId + '"><span class="label label-warning"><i class="icon fa fa-close"></i> Edit</span></a>'
     }
 
+    var totalTimeCount = {
+        count: 0,
+        getTime: function(){
+            var sec = this.count ;
+            var h = sec/3600 ^ 0 ;
+            var m = (sec-h*3600)/60 ^ 0 ;
+            var s = sec-h*3600-m*60 ;
+            if(timeNotation == 'decimal'){
+                return (h + (m / 60) + (s / 3600)).toFixed(2);
+            }
+            return ((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));/*+" мин. "+(s<10?"0"+s:s)+" сек.")*/
 
-    function createAdminTable(data) {
+        }
+    }
+
+    function sumTime(time){
+
+        var splitTime = time.split(':');
+
+        hours = parseInt(splitTime[0]);
+        //console.log(hours);
+
+        minute = parseInt(splitTime[1]);
+        /*minute = minute%60;*/
+
+        second = parseInt(splitTime[2]);
+        /*minute = minute + second/60;
+         second = second%60;*/
+
+        // moment.duration("12:10:12", "HH:mm:ss");
+
+        // console.log(hours + ':' + minute + ':' + second);
+
+        totalTimeCount.count += hours*60*60 + minute*60 + second;
+
+    }
+
+
+    var timeNotation = "<?= isset($nominal) ? is_null($nominal) ? 'hour' : $nominal : 'hour' ?>";
+
+
+    function prettyTime(time, showZero) {
+        time = time.toString().replace(/,/g, '.').replace(/;/g, ':');
+        if (time != '') {
+            if (timeNotation == 'decimal') {
+                if (time == "0") {
+                    time = "0:00";
+                }
+                if (time.indexOf('.') == -1) {
+                    // van 'hour' naar 'decimal'
+                    var colon = time.indexOf(':');
+                    if (colon == 0) {
+                        time = "0" + time;
+                    }
+                    var timeArray = time.split(':');
+                    var hours = parseInt(timeArray[0], 10);
+                    var minutes = (timeArray[1] ? parseInt(timeArray[1], 10) : 0);
+                    if (isNaN(hours) || isNaN(minutes)) {
+                        return '';
+                    } else {
+                        time =  hours + (minutes/60);
+                    }
+                }
+                time = Math.round(time*100)/100;
+                if (time == parseInt(time)) {
+                    time = time+".00";
+                }
+                var timeArray = time.toString().split('.');
+                if (timeArray[1].length == 1) {
+                    time = time+"0";
+                }
+                /*
+                 if (currentLanguage == 'nl') {
+                 time = time.toString().replace('.', ',');
+                 }
+                 */
+            } else if (timeNotation == 'hour') {
+                if (time.indexOf(':') == -1) {
+                    // van 'decimal' naar 'hour'
+                    var point = time.indexOf('.');
+                    if (point == 0) {
+                        time = "0" + time;
+                    }
+                    var timeArray = time.split('.');
+                    var hours = parseInt(timeArray[0], 10);
+                    var minutes = Math.round((time - hours)*100);
+                    minutes = Math.round(minutes * 0.6);
+                    if (isNaN(hours) || isNaN(minutes)) {
+                        return '';
+                    } else {
+                        if (minutes == 60) {
+                            hours++;
+                            minutes = 0;
+                        }
+                        if (minutes.toString().length == 0) {
+                            minutes = '00';
+                        } else if (minutes.toString().length == 1) {
+                            minutes = '0' + minutes;
+                        }
+                        time = hours + ":" + minutes;
+                    }
+                } else {
+                    var timeArray = time.split(':');
+                    var hours = parseInt(timeArray[0], 10);
+                    if (isNaN(hours)) {
+                        hours = 0;
+                    }
+                    var minutes = (timeArray[1] ? parseInt(timeArray[1], 10) : 0);
+                    if (minutes > 60) {
+                        var moreHours = parseInt(minutes/60);
+                        hours += moreHours;
+                        minutes = minutes - (moreHours*60);
+                    }
+                    if (minutes == 60) {
+                        hours++;
+                        minutes = 0;
+                    }
+                    if (minutes.toString().length == 0) {
+                        minutes = '00';
+                    } else if (minutes.toString().length == 1) {
+                        minutes = '0' + minutes;
+                    }
+                    time = hours + ":" + minutes;
+                }
+            }
+        }
+        if ((time == '0.00' || time == '0:00') && !showZero) {
+            time = '';
+        }
+
+        //console.log(time + " tt");
+
+        return time;
+    }
+
+    /*
+        @sum | object
+            {
+                type : string (time or price)
+                label : string
+                index : int
+
+            }
+     */
+
+    function createAdminTable(data, resultHtml, sum) {
 
         if(data.status){
 
             var thead = '';
             var tbody = '';
+            var tfoot = '';
+            var sumTotal = '';
+            var footLabel = '';
             $.each(data.titles, function (i, item) {
                 thead += wrapTag(item,'th');
             });
 
             $.each(data.data, function (i, item) {
                 var td = '';
+                if(sum){
+                    if(sum.label){
+                        footLabel = sum.label;
+                    }
+                    switch (sum.type){
+                        case 'time':
+                            sumTime(item[sum.index]);
+                            break;
+                        case 'price':
+                            break;
+                    }
+                }
                $.each(item,function(k,v){
+                   if(v !== null){
+                       if(k == 'status_name'){
 
-                   if(k == 'status_name'){
+                           v = getStatus(v);
+                           td += wrapTag(v,'td');
 
-                       v = getStatus(v);
-                       td += wrapTag(v,'td');
+                           td += wrapTag(getCrudLinks(item.id,data.links),'td');
 
-                       td += wrapTag(getCrudLinks(item.id,data.links),'td');
-
+                       }
+                       else {
+                           if(v.toString().split(':').length == 3){
+                               td += wrapTag(prettyTime(v, true),'td');
+                           }
+                           else {
+                               td += wrapTag(v,'td');
+                           }
+                       }
+                   }else{
+                       td += wrapTag('','td');
                    }
-                   else {
-                       td += wrapTag(v,'td');
-                   }
+
 
                });
                 tbody += wrapTag(td,'tr');
             });
-
-            var tableHtml = wrapTag(wrapTag(wrapTag(thead,'tr'),'thead') + wrapTag(tbody,'tbody'),'table', 'table table-bordered');
-            $('.box-body').html(tableHtml);
+            if(sum) {
+                tfoot += wrapTag('<tr><td class="text-right" colspan=' + data.titles.length + '>' + footLabel + ': ' + wrapTag(totalTimeCount.getTime(), 'strong') + '</td></tr>', 'tfoot');
+            }
+            var tableHtml = wrapTag(wrapTag(wrapTag(thead,'tr'),'thead') + wrapTag(tbody,'tbody') + tfoot,'table', 'table table-bordered');
+            $(resultHtml).html(tableHtml);
 
         }
         else
-            $('.box-body').html(wrapTag('Empty', 'div'));
+            $(resultHtml).html(wrapTag('Empty', 'div'));
     }
 
     function readURL(input,call) {
@@ -553,7 +723,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 url     = $this.parent('li').parent('ul').attr('data-ajaxurl');
 
             $.get(url + '/' + loadurl, function(data) {
-                createAdminTable(data);
+                createAdminTable(data, '.box-body');
             });
 
             $this.tab('show');

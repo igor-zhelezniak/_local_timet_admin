@@ -3,6 +3,15 @@
 @section('content')
     <div class="container">
         <div class="row">
+
+            @if(!\App\Plan::checkLimit())
+                <div class="callout callout-warning">
+                    <h4>Users Limit!</h4>
+
+                    <p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit() }} users</p>
+                </div>
+            @endif
+
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">List of users</h3>
@@ -49,19 +58,8 @@
                     <div class="col-md-2">
                         @if(\App\Plan::checkLimit())
                             <a href="{{ url('/admin/addUser') }}" class="btn btn-success" type="button" >Add User</a> <br />
-                            @else
-                                <span class="label label-info">For a given tariff plan, a maximum of {{ \App\Plan::getLimit() }} users</span>
                         @endif
 
-                    </div>
-                    <div class="col-md-10">
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <li><a href="#">«</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">»</a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
