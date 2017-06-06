@@ -133,6 +133,8 @@
                             <li><a href="#price_table">Price Table</a></li>
                             <li><a href="#testimonial">Testimonials</a></li>
                             <li><a href="#contact">Contact us</a></li>
+                            <li><a href="/login">Sign In</a></li>
+                            <li><a href="/register">Join</a></li>
                         </ul>
                     </div>	<!-- collapse navbar-collapse -->
                 </div>	<!-- container-fluid -->
