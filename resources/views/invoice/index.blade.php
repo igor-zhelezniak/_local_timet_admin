@@ -46,7 +46,8 @@
                 </div>
             </form>
         </div>
-        <div class="row">
+
+        <div class="row" style="margin-bottom: 15px;">
             <div class="col-md-">
                 <label for=""></label>
                 <div class="text-right">
@@ -54,6 +55,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="box">
                 <div class="box-header with-border">
@@ -86,6 +88,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <script>
         function addOptions(data){

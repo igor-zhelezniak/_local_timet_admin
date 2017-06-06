@@ -47,7 +47,12 @@
                 <!-- /.box-body -->
                 <div class="box-footer clearfix">
                     <div class="col-md-2">
-                        <a href="{{ url('/admin/addUser') }}" class="btn btn-success" type="button" >Add User</a> <br />
+                        @if(\App\Plan::checkLimit())
+                            <a href="{{ url('/admin/addUser') }}" class="btn btn-success" type="button" >Add User</a> <br />
+                            @else
+                                <span class="label label-info">For a given tariff plan, a maximum of {{ \App\Plan::getLimit() }} users</span>
+                        @endif
+
                     </div>
                     <div class="col-md-10">
                         <ul class="pagination pagination-sm no-margin pull-right">

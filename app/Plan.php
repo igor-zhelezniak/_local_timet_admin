@@ -46,4 +46,34 @@ class Plan extends Model
         return true;
     }
 
+    /* for limiting users in company */
+
+    private static $limit = null;
+
+    private static $plan_linmit = [
+        1 => 5,
+        2 => 10,
+        3 => INF
+    ];
+
+    public static function getLimit(){
+        return self::$plan_linmit[Plan::getPlan(Auth::user()->company_id)];
+    }
+
+    public static function checkLimit(){
+        if(is_null(self::$limit)){
+            self::$limit = true;
+            $count = User::where('users.id', '!=', Auth::user()->id)
+                ->where('users.company_id', Auth::user()->company_id)
+                ->count();
+
+            $plan = Plan::getPlan(Auth::user()->company_id);
+
+            if($count >= self::$plan_linmit[$plan]){
+                self::$limit = false;
+            }
+        }
+        return self::$limit;
+    }
+
 }
