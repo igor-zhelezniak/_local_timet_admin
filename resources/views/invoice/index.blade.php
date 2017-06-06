@@ -182,41 +182,46 @@
             });
 
             $('#showInvoiceResult').click(function () {
-                totalTimeCount.count = 0;
-                var selectInvoiceForm = $('#selectInvoiceForm').serialize();
 
-                $.post('/ajaxGetInvoice', selectInvoiceForm, function (data) {
+                if(!$(this).hasClass('block')) {
+                    $(this).addClass('block');
 
-                    if(data.data.length >= 1){
-                        $.each(data.data,function(key, value){
+                    totalTimeCount.count = 0;
+                    var selectInvoiceForm = $('#selectInvoiceForm').serialize();
 
-                            sumTime(value.worked_time);
+                    $.post('/ajaxGetInvoice', selectInvoiceForm, function (data) {
 
-                        });
+                        if (data.data.length >= 1) {
+                            $.each(data.data, function (key, value) {
 
-                        invoiceObj.name = data.data[0].name;
-                        invoiceObj.project_name = data.data[0].project_name;
-                        invoiceObj.from = data.from;
-                        invoiceObj.to = data.to;
-                        invoiceObj.time = totalTimeCount.getTime();
+                                sumTime(value.worked_time);
 
-                        var html = '<tr>'
-                            + '<td>' + invoiceObj.name + '</td>'
-                            + '<td>' + invoiceObj.project_name + '</td>'
-                            + '<td>' + invoiceObj.from + '</td>'
-                            + '<td>' + invoiceObj.to + '</td>'
-                            + '<td>' + invoiceObj.time + '</td>'
-                            + '<td><input name="price" class="form-control"></td>'
-                            + '</tr>';
+                            });
 
-                        $('#table').find('tbody').html(html);
-                    }
-                    else {
-                        $('#table').find('tbody').html('');
-                    }
+                            invoiceObj.name = data.data[0].name;
+                            invoiceObj.project_name = data.data[0].project_name;
+                            invoiceObj.from = data.from;
+                            invoiceObj.to = data.to;
+                            invoiceObj.time = totalTimeCount.getTime();
 
+                            var html = '<tr>'
+                                + '<td>' + invoiceObj.name + '</td>'
+                                + '<td>' + invoiceObj.project_name + '</td>'
+                                + '<td>' + invoiceObj.from + '</td>'
+                                + '<td>' + invoiceObj.to + '</td>'
+                                + '<td>' + invoiceObj.time + '</td>'
+                                + '<td><input name="price" class="form-control"></td>'
+                                + '</tr>';
 
-                });
+                            $('#table').find('tbody').html(html);
+                        }
+                        else {
+                            $('#table').find('tbody').html('');
+                        }
+
+                        $('#showInvoiceResult').removeClass('block');
+                    });
+                }
             });
         });
     </script>
