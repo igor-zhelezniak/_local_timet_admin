@@ -38,7 +38,7 @@ Route::post('/projects/saveEditProject', 'ProjectController@saveEditProject');
 
 
 Route::get('/admin/showUsers', 'Admin\AddNewUserController@showUsers');
-Route::get('/admin/addUser', 'Admin\AddNewUserController@addUser');
+Route::get('/admin/addUser', 'Admin\AddNewUserController@addUser')->middleware('user_limit');
 Route::post('/admin/saveUser', 'Admin\AddNewUserController@saveUser');
 
 Route::get('/admin/editUser/{id}', 'Admin\AddNewUserController@editUser');
