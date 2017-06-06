@@ -62,10 +62,13 @@
 		}
 
         function prettyTime(time, showZero) {
-		    if(~time.indexOf(',')) {
-		        time = time.replace(',', '.');
-			}
             if (time != '') {
+				time = time.toString();
+
+                if(time.indexOf(',') != -1) {
+                    time = time.replace(',', '.');
+                }
+
                 if (timeNotation == 'decimal') {
                     if (time == "0") {
                         time = "0:00";
