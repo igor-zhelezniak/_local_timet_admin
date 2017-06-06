@@ -62,6 +62,9 @@
 		}
 
         function prettyTime(time, showZero) {
+		    if(~time.indexOf(',')) {
+		        time = time.replace(',', '.');
+			}
             if (time != '') {
                 if (timeNotation == 'decimal') {
                     if (time == "0") {
