@@ -4,11 +4,11 @@
     <div class="container">
         <div class="row">
 
-            @if(!\App\Plan::checkLimit())
+            @if(!\App\Plan::checkLimit('users'))
                 <div class="callout callout-warning">
                     <h4>Users Limit!</h4>
 
-                    <p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit() }} users</p>
+                    <p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit('users') }} users</p>
                 </div>
             @endif
 
@@ -56,7 +56,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer clearfix">
                     <div class="col-md-2">
-                        @if(\App\Plan::checkLimit())
+                        @if(\App\Plan::checkLimit('users'))
                             <a href="{{ url('/admin/addUser') }}" class="btn btn-success" type="button" >Add User</a> <br />
                         @endif
 

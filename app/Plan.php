@@ -6,6 +6,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
 
@@ -51,25 +52,57 @@ class Plan extends Model
     private static $limit = null;
 
     private static $plan_linmit = [
-        1 => 5,
+        'users' => [
+            1 => 5,
+            2 => INF,
+        ],
+        'projects' => [
+            1 => 5,
+            2 => INF,
+        ],
+        'clients' => [
+            1 => 5,
+            2 => INF,
+        ],
+        'categories' => [
+            1 => 15,
+            2 => INF,
+        ],
+        /*1 => 3,
         2 => 10,
-        3 => INF
+        3 => INF*/
     ];
 
-    public static function getLimit(){
-        return self::$plan_linmit[Plan::getPlan(Auth::user()->company_id)];
+    public static function getLimit($type){
+        return self::$plan_linmit[$type][Plan::getPlan(Auth::user()->company_id)];
     }
 
-    public static function checkLimit(){
+    public static function checkLimit($type){
         if(is_null(self::$limit)){
             self::$limit = true;
-            $count = User::where('users.id', '!=', Auth::user()->id)
-                ->where('users.company_id', Auth::user()->company_id)
-                ->count();
+
+            switch ($type){
+                case 'users':
+                    $count = User::where('users.id', '!=', Auth::user()->id)
+                        ->where('users.company_id', Auth::user()->company_id);
+                    break;
+                case 'projects':
+                    $count = Projects::where('company_id', Auth::user()->company_id);
+                    break;
+                case 'clients':
+                    $count = DB::table('clients_users')->where('company_id', Auth::user()->company_id);
+                    //$count = Projects::where('company_id', Auth::user()->company_id);
+                    break;
+                case 'categories':
+                    $count = DB::table('categories_users')->where('company_id', Auth::user()->company_id);
+                    break;
+            }
+
+            $count = $count->count();
 
             $plan = Plan::getPlan(Auth::user()->company_id);
 
-            if($count >= self::$plan_linmit[$plan]){
+            if($count >= self::$plan_linmit[$type][$plan]){
                 self::$limit = false;
             }
         }

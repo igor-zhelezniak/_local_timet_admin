@@ -11,6 +11,15 @@
 @section('content')
     <div class="container">
         <div class="row">
+
+            @if(!\App\Plan::checkLimit('categories'))
+                <div class="callout callout-warning">
+                    <h4>Categories Limit!</h4>
+
+                    <p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit('categories') }} categories</p>
+                </div>
+            @endif
+
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">List of Categories</h3>
@@ -44,7 +53,9 @@
                 <div class="box-footer clearfix">
                     @if(Auth::user()->hasRole(1))
                         <div class="col-md-2">
-                            <a href="{{ url('/admin/addCategories') }}" class="btn btn-success" type="button">Add Category</a> <br />
+                            @if(\App\Plan::checkLimit('categories'))
+                                <a href="{{ url('/admin/addCategories') }}" class="btn btn-success" type="button">Add Category</a> <br />
+                            @endif
                         </div>
                     @endif
                 </div>

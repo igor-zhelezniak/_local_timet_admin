@@ -15,9 +15,9 @@ class CheckUserLimit
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $type)
     {
-        if(!Plan::checkLimit()){
+        if(!Plan::checkLimit($type)){
             return redirect()->back();
         }
         return $next($request);

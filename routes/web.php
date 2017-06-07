@@ -30,7 +30,7 @@ Route::post('/deleteRecord', 'TimeSheetsController@deleteRecord');
 //Route::get('/projects', 'ProjectController@showProjects')->middleware('plan:3'); // for checking user plan
 
 Route::get('/projects', 'ProjectController@showProjects');
-Route::get('/projects/add', 'ProjectController@addProject');
+Route::get('/projects/add', 'ProjectController@addProject')->middleware('user_limit:projects');
 Route::post('/projects/saveProject', 'ProjectController@saveProject');
 
 Route::get('/projects/editProject/{id}', 'ProjectController@editProject');
@@ -38,7 +38,7 @@ Route::post('/projects/saveEditProject', 'ProjectController@saveEditProject');
 
 
 Route::get('/admin/showUsers', 'Admin\AddNewUserController@showUsers');
-Route::get('/admin/addUser', 'Admin\AddNewUserController@addUser')->middleware('user_limit');
+Route::get('/admin/addUser', 'Admin\AddNewUserController@addUser')->middleware('user_limit:users');
 Route::post('/admin/saveUser', 'Admin\AddNewUserController@saveUser');
 
 Route::get('/admin/editUser/{id}', 'Admin\AddNewUserController@editUser');
@@ -53,14 +53,14 @@ Route::get('/admin/editDepartment/{id}', 'Admin\DepartmentController@editDepartm
 Route::post('/admin/saveEditDepartment', 'Admin\DepartmentController@saveEditDepartment');
 
 Route::get('/admin/showCategories', 'Admin\CategoryController@showCategories');
-Route::get('/admin/addCategories', 'Admin\CategoryController@addCategories');
+Route::get('/admin/addCategories', 'Admin\CategoryController@addCategories')->middleware('user_limit:categories');
 Route::post('/admin/saveCategories', 'Admin\CategoryController@saveCategories');
 
 Route::get('/admin/editCategory/{id}', 'Admin\CategoryController@editCategory');
 Route::post('/admin/saveEditCategory', 'Admin\CategoryController@saveEditCategory');
 
 Route::get('/admin/showClients', 'Admin\CustomerController@showClients');
-Route::get('/admin/addClient', 'Admin\CustomerController@addClient');
+Route::get('/admin/addClient', 'Admin\CustomerController@addClient')->middleware('user_limit:clients');
 Route::post('/admin/saveClient', 'Admin\CustomerController@saveClient');
 
 Route::get('/admin/editClient/{id}', 'Admin\CustomerController@editClient');

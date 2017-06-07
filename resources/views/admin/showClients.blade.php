@@ -12,6 +12,15 @@
 @section('content')
     <div class="container">
         <div class="row">
+
+            @if(!\App\Plan::checkLimit('clients'))
+                <div class="callout callout-warning">
+                    <h4>Clients Limit!</h4>
+
+                    <p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit('clients') }} clients</p>
+                </div>
+            @endif
+
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">List of Clients</h3>
@@ -55,7 +64,9 @@
                 <!-- /.box-body -->
                 <div class="box-footer clearfix">
                     <div class="col-md-2">
-                        <a href="{{ url('/admin/addClient') }}" class="btn btn-success" type="button">Add Client</a> <br />
+                        @if(\App\Plan::checkLimit('clients'))
+                            <a href="{{ url('/admin/addClient') }}" class="btn btn-success" type="button">Add Client</a> <br />
+                        @endif
                     </div>
 
                 </div>

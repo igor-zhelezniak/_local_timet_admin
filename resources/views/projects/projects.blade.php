@@ -3,6 +3,15 @@
 @section('content')
 <div class="container">
 	<div class="row">
+
+		@if(!\App\Plan::checkLimit('projects'))
+			<div class="callout callout-warning">
+				<h4>Projects Limit!</h4>
+
+				<p>For a given tariff plan, a maximum of {{ \App\Plan::getLimit('projects') }} projects</p>
+			</div>
+		@endif
+
 		<div class="box">
 			<div class="box-header with-border">
 				<h3 class="box-title">List of Projects</h3>
@@ -56,7 +65,7 @@
 			</div>
 			<!-- /.box-body -->
 			<div class="box-footer clearfix">
-				@if(Auth::user()->hasRole(1))
+				@if(Auth::user()->hasRole(1) and \App\Plan::checkLimit('projects'))
 					<div class="col-md-2">
 						<a href="{{ url('/projects/add') }}" ><input class="btn btn-success" type="submit" value="Add Project"></a> <br />
 					</div>
