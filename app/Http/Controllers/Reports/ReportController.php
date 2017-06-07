@@ -121,7 +121,7 @@ class ReportController extends AuthorizationController
 
         if(!empty($request->customerName)) {
 
-            $result->where('clients.user_id', $request->customerName);
+            $result->where('clients.id', $request->customerName);
         }
 
         $result->whereBetween('timesheet.logged_date', array($request->dateFrom, $request->dateTo));
@@ -130,16 +130,17 @@ class ReportController extends AuthorizationController
             'categories.name as categoryName');*/
 
         $result->select('timesheet.logged_date', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName',
-            'timesheet.description', 'timesheet.worked_time');
+           'timesheet.description', 'timesheet.worked_time');
 
 
         $groupBy = false;
         $titles = ['Date', 'Name', 'Project', 'Categories', 'Description', 'Time'];
+
         if(!empty($request->groupBy)) {
             $result->groupBy('timesheet.user_id');
             $result->select('users.name as userName',  DB::raw('SEC_TO_TIME( SUM( TIME_TO_SEC( `worked_time` ) ) ) as time'));
             $groupBy = true;
-            $titles = ['user_name', 'time'];
+            $titles = ['User Name', 'Time'];
         }
 
         $result->orderBy('timesheet.logged_date');

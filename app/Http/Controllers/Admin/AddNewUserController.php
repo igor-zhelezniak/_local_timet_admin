@@ -104,6 +104,11 @@ class AddNewUserController extends Controller
                 ->get();
 
             $roles = DB::table('roles')->get();
+
+            if(Auth::user()->hasRole(2)){
+                $roles = DB::table('roles')->where('id', '!=', 1)->get();
+            }
+
             $status = DB::table('statuses')->get();
 
 
@@ -161,7 +166,7 @@ class AddNewUserController extends Controller
     }
 
     public function profileInfo(){
-        if(Auth::user()->hasRole(1)){
+        if(Auth::user()->hasRole(1) or true){
             $timezones = DB::table('timezones')->pluck('timezone', 'id');
             $company = CompanyInfo::findOrFail(Auth::user()->company_id);
             $user = User::findOrFail(Auth::user()->id);
@@ -308,6 +313,10 @@ class AddNewUserController extends Controller
                 ->where('departments_users.user_id', '=',  $userInfo->id)->get();
 
             $roles = DB::table('roles')->pluck('role_name', 'id');
+
+            if(Auth::user()->hasRole(2)){
+                $roles = DB::table('roles')->where('id', '!=', 1)->pluck('role_name', 'id');
+            }
 
             $status = DB::table('statuses')->pluck('status_name', 'id');
 
