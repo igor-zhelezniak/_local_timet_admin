@@ -17,17 +17,32 @@ class Plan extends Model
     public $timestamps = false;
 
     public static $plan = null;
+    public static $plan_name = null;
 
     public static function getPlan($id){
         if(is_null(self::$plan)){
             $plan = Plan::where('company_id', $id)->select('type')->get()->first();
             if(!is_null($plan)){
-                return $plan->type;
+                self::$plan = $plan->type;
             }
-            return 1;
+            else {
+                self::$plan = 1;
+            }
         }
 
        return self::$plan;
+    }
+
+    public static function getPlanName(){
+        if(is_null(self::$plan_name)){
+
+            $plan = DB::table('payment_plan')->where('type', self::$plan)->select('name')->get()->first();
+
+            self::$plan_name = $plan->name;
+
+        }
+
+        return self::$plan_name;
     }
 
 
@@ -35,6 +50,7 @@ class Plan extends Model
         if( is_null(Plan::$plan)){
             self::$plan = Plan::getPlan(Auth::user()->company_id);
         }
+        return self::$plan;
     }
 
     public static function checkPlan($plan_type){

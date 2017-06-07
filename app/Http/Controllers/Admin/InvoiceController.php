@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 class InvoiceController extends Controller
 {
     public function __construct(){
+        parent::__construct();
         $this->middleware('auth');
     }
 

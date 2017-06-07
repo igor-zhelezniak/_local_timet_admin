@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 class DepartmentController extends Controller
 {
     public function __construct(){
+        parent::__construct();
         $this->middleware('auth');
     }
 

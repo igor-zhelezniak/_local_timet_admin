@@ -92,3 +92,7 @@ Route::get('/invoice', 'Admin\InvoiceController@index');
 Route::post('/ajaxGetProjects/{customer_id}', 'Admin\InvoiceController@ajaxGetProjects');
 Route::post('/ajaxGetInvoice', 'Admin\InvoiceController@ajaxGetInvoice');
 Route::post('/ajaxCreateInvoice', 'Admin\InvoiceController@ajaxCreateInvoice');
+
+Route::get('/plan', function (){
+    return view('plan.index');
+});

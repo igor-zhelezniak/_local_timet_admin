@@ -19,11 +19,13 @@ class AuthorizationController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
-            Plan::setPlan();
+        /*$this->middleware(function ($request, $next) {
+            $plan = Plan::setPlan();
+            dd($plan);
             return $next($request);
-        });
+        });*/
 
         $res = DB::table('roles')->get();
 

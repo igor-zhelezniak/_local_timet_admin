@@ -94,7 +94,7 @@ class RegisterController extends Controller
 
         Plan::create([
            'company_id' => $copmany->id,
-            'expiration' =>  Carbon::now()->addMonth(1)->toDateString()
+            'expiration' =>  Carbon::now()->addMonth(1000000)->toDateString()
         ]);
 
         $users = User::create([

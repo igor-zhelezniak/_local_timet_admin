@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 class CategoryController extends Controller
 {
     public function __construct(){
+        parent::__construct();
         $this->middleware('auth');
     }
 

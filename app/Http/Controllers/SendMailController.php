@@ -11,6 +11,12 @@ use Illuminate\View\View;
 
 class SendMailController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
     public function sendMail(Request $request){
 
         Mail::send('email.email', $request->all(), function($message) use ($request) {
