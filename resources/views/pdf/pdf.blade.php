@@ -1,3 +1,15 @@
+<?php
+    function decimalHours($time)
+    {
+        $hms = explode(":", $time);
+        return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
+    }
+
+    function convert($time){
+        return decimalHours($time);
+    }
+?>
+
 <style>
     table {
         color: #333; /* Lighten up font color */
@@ -44,7 +56,12 @@
             <td>{{ $item->projectName }}</td>
             <td>{{ $item->categoryName }}</td>
             <td>{{ $item->description }}</td>
-            <td>{{ $item->worked_time }}</td>
+            @if($time_notation == 'decimal')
+                <td><?php echo sprintf("%.2f" . "</br>\n", convert($item->worked_time)); ?></td>
+            @else
+                <td>{{ $item->worked_time }}</td>
+            @endif
+
         </tr>
     @endforeach
     </tbody>

@@ -82,7 +82,7 @@ class ReportController extends AuthorizationController
         ]);
     }
 
-    public function showReportResult(Request $request, $response_type){
+    public function showReportResult(Request $request, $response_type, $time_notation){
         if(empty($request->dateFrom)){
             $request->dateFrom = date('Y-d-m');
         }
@@ -173,10 +173,10 @@ class ReportController extends AuthorizationController
             ]);
                 break;
             case 'excel':
-                return $this->exportToExcelFile($result, 'xlsx');
+                return $this->exportToExcelFile($result, 'xlsx',$time_notation);
                 break;
             case 'pdf':
-                return $this->exportToPdfFile($result);
+                return $this->exportToPdfFile($result, $time_notation);
                 break;
         }
 
@@ -192,13 +192,13 @@ class ReportController extends AuthorizationController
         return $result;
     }
 
-    private function exportToPdfFile($data){
+    private function exportToPdfFile($data, $time_notation){
 
        $data->select('logged_date', 'users.name as userName', 'projects.project_name as projectName',
            'categories.name as categoryName', 'timesheet.description', 'worked_time');
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML((string) view('pdf.pdf', ['data' => $data->get()]));
+        $pdf->loadHTML((string) view('pdf.pdf', ['data' => $data->get(), 'time_notation' => $time_notation]));
 
         $response =  array(
             'name' => "TimetReport.pdf",
@@ -207,15 +207,27 @@ class ReportController extends AuthorizationController
         return response()->json($response);
     }
 
-    private function exportToExcelFile($data, $format){
+    private function decimalHours($time)
+    {
+        $hms = explode(":", $time);
+        return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
+    }
+
+    private function exportToExcelFile($data, $format, $time_notation){
 
         $data->select('logged_date', 'users.name as userName', 'projects.project_name as projectName', 'categories.name as categoryName', 'timesheet.description', 'worked_time');
 
         $result_array[] = ['Date', 'Name','Project','Cetegories','Description', 'Time'];
 
         foreach ($data->get() as $item) {
-            $result_array[] = (array)$item;
+            $tmp = (array)$item;
+
+            if($time_notation == 'decimal'){
+                $tmp['worked_time'] = sprintf("%.2f", $this->decimalHours($tmp['worked_time']));
+            }
+            $result_array[] = $tmp;
         }
+
 
         $file = Excel::create('Report', function($excel) use ($result_array){
 

@@ -162,14 +162,14 @@
 
                             $('#exportToExcel').click(function(){
                                 var selectReportForm = $('#selectReportForm').serialize();
-                                $.post('/showReportResult/excel', selectReportForm, function(response){
+                                $.post('/showReportResult/excel/' + timeNotation, selectReportForm, function(response){
                                     saveFile(response);
                                 });
                             });
 
                             $('#exportToPdf').click(function(){
                                 var selectReportForm = $('#selectReportForm').serialize();
-                                $.post('/showReportResult/pdf', selectReportForm, function(response){
+                                $.post('/showReportResult/pdf/' + timeNotation, selectReportForm, function(response){
                                     saveFile(response);
                                 });
                             });
@@ -183,7 +183,7 @@
                                     $('#reportResultTable tfoot tr td').empty();
                                     totalTimeCount.count = 0;
                                     var selectReportForm = $('#selectReportForm').serialize();
-                                    $.post('/showReportResult/json', selectReportForm, function (data) {
+                                    $.post('/showReportResult/json/' + timeNotation , selectReportForm, function (data) {
 
                                         var html = '';
 

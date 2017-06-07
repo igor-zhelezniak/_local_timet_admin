@@ -68,7 +68,7 @@ Route::post('/admin/saveEditClient', 'Admin\CustomerController@saveEditClient');
 
 
 Route::get('/reports', 'Reports\ReportController@showReport');
-Route::post('/showReportResult/{response_type}', 'Reports\ReportController@showReportResult');
+Route::post('/showReportResult/{response_type}/{time_type}', 'Reports\ReportController@showReportResult');
 
 Route::get('/admin/settings', 'Admin\CompanyController@showSettings');
 Route::post('/admin/uploadLogo', 'Admin\CompanyController@uploadLogo');
