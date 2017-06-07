@@ -685,7 +685,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 tfoot += wrapTag('<tr><td class="text-right" colspan=' + data.titles.length + '>' + footLabel + ': ' + wrapTag(totalTimeCount.getTime(), 'strong') + '</td></tr>', 'tfoot');
             }
             var tableHtml = wrapTag(wrapTag(wrapTag(thead,'tr'),'thead') + wrapTag(tbody,'tbody') + tfoot,'table', 'table table-bordered');
-            $(resultHtml).html(tableHtml);
+            $(resultHtml).append(tableHtml);
 
         }
         else

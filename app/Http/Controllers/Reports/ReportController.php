@@ -67,6 +67,7 @@ class ReportController extends AuthorizationController
         $groupBy = [
             null => 'Select Item',
             1 => 'Users',
+            2 => 'Users / Projects',
         ];
 
 
@@ -137,21 +138,40 @@ class ReportController extends AuthorizationController
         $titles = ['Date', 'Name', 'Project', 'Categories', 'Description', 'Time'];
 
         if(!empty($request->groupBy)) {
-            $result->groupBy('timesheet.user_id');
-            $result->select('users.name as userName',  DB::raw('SEC_TO_TIME( SUM( TIME_TO_SEC( `worked_time` ) ) ) as time'));
-            $groupBy = true;
-            $titles = ['User Name', 'Time'];
+            switch ($request->groupBy){
+                case 1:
+                    $result->groupBy('timesheet.user_id');
+                    $result->select('users.name as userName',  DB::raw('SEC_TO_TIME( SUM( TIME_TO_SEC( `worked_time` ) ) ) as time'));
+                    $groupBy = true;
+                    $titles = ['User Name', 'Time'];
+                    break;
+                case 2:
+                    $result->groupBy( DB::raw('concat(user_id, \'-\', project_id)'));
+                    $result->select('users.name', 'projects.project_name',  DB::raw('SEC_TO_TIME( SUM( TIME_TO_SEC( `worked_time` ) ) ) as time'));
+                    $groupBy = 'user-project';
+                    $titles = ['Project', 'Time'];
+                    break;
+            }
+
         }
 
         $result->orderBy('timesheet.logged_date');
 
         switch ($response_type){
-            case 'json': return response()->json([
-                'data' => $result->get(),
+            case 'json':
+                $result = $result->get();
+
+                if($request->groupBy == 2){
+                    $result = $this->prepareUsersProjects($result);
+                }
+
+                return response()->json([
+                'data' => $result,
                 'titles' => $titles,
                 'status' => true,
                 'groupBy' => $groupBy
-            ]); break;
+            ]);
+                break;
             case 'excel':
                 return $this->exportToExcelFile($result, 'xlsx');
                 break;
@@ -160,6 +180,16 @@ class ReportController extends AuthorizationController
                 break;
         }
 
+    }
+
+    private function prepareUsersProjects($data){
+
+        foreach ($data as $item) {
+            $name = $item->name;
+            unset($item->name);
+            $result[$name][] = $item;
+        }
+        return $result;
     }
 
     private function exportToPdfFile($data){

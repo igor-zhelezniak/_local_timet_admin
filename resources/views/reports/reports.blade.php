@@ -10,6 +10,11 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .box-body p.text-center {
+            background-color: lavender;
+        }
+    </style>
 
     <div class="container">
         <div class="row">
@@ -182,10 +187,46 @@
 
                                         var html = '';
 
+                                        $('.box-body').html(html);
+
                                         var totalTimeCountHours = 0;
                                         var totalTimeCountMinutes = 0;
 
-                                        if(data.groupBy){
+                                        switch (data.groupBy){
+                                            case true: {
+                                                createAdminTable(data, '.box-body', {
+                                                    type: 'time',
+                                                    label: 'total time',
+                                                    index: 'time'
+                                                });
+                                            } break;
+                                            case false: {
+                                                createAdminTable(data, '.box-body', {
+                                                    type: 'time',
+                                                    label: 'total time',
+                                                    index: 'worked_time'
+                                                });
+                                            } break;
+                                            case 'user-project': {
+                                                $.each(data.data, function(k,v){
+                                                    $('.box-body').append(wrapTag(wrapTag(k, 'strong'), 'p', 'text-center'));
+                                                    createAdminTable({
+                                                        data: v,
+                                                        status: true,
+                                                        titles: data.titles
+                                                    }, '.box-body', {
+
+                                                        type: 'time',
+                                                        label: 'total time',
+                                                        index: 'time'
+
+                                                        }
+                                                    );
+                                                });
+                                            } break;
+                                        }
+
+                                        /*if(data.groupBy){
                                             createAdminTable(data, '.box-body', {
                                                 type: 'time',
                                                 label: 'total time',
@@ -200,7 +241,7 @@
                                                 index: 'worked_time'
                                             });
 
-                                            /*$.each(data.data,function(key, value){
+                                            /!*$.each(data.data,function(key, value){
 
                                                 html += "<tr><td>" + value.logged_date + "</td>" +
                                                     "<td>" + value.userName + "</td>" +
@@ -212,8 +253,8 @@
                                                 sumTime(value.worked_time);
                                             });
 
-                                            $('#reportResultTable tbody').html(html);*/
-                                        }
+                                            $('#reportResultTable tbody').html(html);*!/
+                                        }*/
 
 
 
