@@ -13,7 +13,7 @@ use Validator;
 class Plan extends Model
 {
     protected  $table = 'companies_plans';
-    protected $fillable = ['company_id', 'expiration', 'status', 'type'];
+    protected $fillable = ['company_id', 'expiration', 'status', 'type', 'start_date'];
     public $timestamps = false;
 
     public static $plan = null;

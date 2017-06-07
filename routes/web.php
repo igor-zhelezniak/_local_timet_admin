@@ -93,6 +93,9 @@ Route::post('/ajaxGetProjects/{customer_id}', 'Admin\InvoiceController@ajaxGetPr
 Route::post('/ajaxGetInvoice', 'Admin\InvoiceController@ajaxGetInvoice');
 Route::post('/ajaxCreateInvoice', 'Admin\InvoiceController@ajaxCreateInvoice');
 
+
+Route::post('/fixPayment', 'PaymentController@fixPayment');
+
 Route::get('/plan', function (){
     return view('plan.index');
 });
