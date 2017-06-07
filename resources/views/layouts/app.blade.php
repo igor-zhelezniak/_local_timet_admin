@@ -81,6 +81,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+
+
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -347,7 +349,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main content -->
         <section class="content">
 
-            @yield('content')
+            @if(\Illuminate\Support\Facades\Session::get('blocked') == true)
+                <div class="alert alert-danger alert-dismissible">
+                    <h4><i class="icon fa fa-ban"></i> Your Account Blocked!</h4>
+                    Account Blocked!
+                </div>
+                @else
+                @yield('content')
+            @endif
+
+
 
         </section>
         <!-- /.content -->

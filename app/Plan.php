@@ -3,11 +3,13 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Validator;
 
 class Plan extends Model
@@ -69,7 +71,7 @@ class Plan extends Model
 
     private static $plan_linmit = [
         'users' => [
-            1 => 5,
+            1 => 1,
             2 => INF,
         ],
         'projects' => [
@@ -83,14 +85,28 @@ class Plan extends Model
         'categories' => [
             1 => 15,
             2 => INF,
-        ],
-        /*1 => 3,
-        2 => 10,
-        3 => INF*/
+        ]
     ];
 
     public static function getLimit($type){
         return self::$plan_linmit[$type][Plan::getPlan(Auth::user()->company_id)];
+    }
+
+    private static function getCountUsers(){
+        return User::where('users.id', '!=', Auth::user()->id)
+            ->where('users.company_id', Auth::user()->company_id)->count();
+    }
+
+    private static function getCountProjects(){
+        return Projects::where('company_id', Auth::user()->company_id)->count();
+    }
+
+    private static function getCountClients(){
+        return DB::table('clients_users')->where('company_id', Auth::user()->company_id)->count();
+    }
+
+    private static function getCountCategories(){
+        return DB::table('categories_users')->where('company_id', Auth::user()->company_id)->count();
     }
 
     public static function checkLimit($type){
@@ -99,22 +115,18 @@ class Plan extends Model
 
             switch ($type){
                 case 'users':
-                    $count = User::where('users.id', '!=', Auth::user()->id)
-                        ->where('users.company_id', Auth::user()->company_id);
+                    $count = self::getCountUsers();
                     break;
                 case 'projects':
-                    $count = Projects::where('company_id', Auth::user()->company_id);
+                    $count = self::getCountProjects();
                     break;
                 case 'clients':
-                    $count = DB::table('clients_users')->where('company_id', Auth::user()->company_id);
-                    //$count = Projects::where('company_id', Auth::user()->company_id);
+                    $count = self::getCountClients();
                     break;
                 case 'categories':
-                    $count = DB::table('categories_users')->where('company_id', Auth::user()->company_id);
+                    $count = self::getCountCategories();
                     break;
             }
-
-            $count = $count->count();
 
             $plan = Plan::getPlan(Auth::user()->company_id);
 
@@ -123,6 +135,47 @@ class Plan extends Model
             }
         }
         return self::$limit;
+    }
+
+    /* functions to block company */
+
+    public static function checkUnactivePayment(){
+        $plan = Plan::where('company_id', Auth::user()->company_id)->first();
+        $status = $plan->status;
+
+        if($status == 0){
+            $arr['users'] = self::getCountUsers();
+            $arr['projects'] = self::getCountProjects();
+            $arr['clients'] = self::getCountClients();
+            $arr['categories'] = self::getCountCategories();
+
+            $flag = true;
+
+            foreach ($arr as $key => $value){
+                if($value > self::$plan_linmit[$key][1]){
+                    $flag = false;
+                }
+            }
+
+            if($flag){
+                self::updatePlanToFree($plan);
+            }else {
+                self::blockCompany();
+            }
+        }
+    }
+
+    private static function updatePlanToFree($plan){
+        $plan->type = 1;
+        $plan->status = 1;
+        $plan->expiration = Carbon::now()->addMonth(999)->toDateString();
+        $plan->start_date = Carbon::now()->toDateString();
+        $plan->save();
+    }
+
+    private static function blockCompany(){
+        var_dump('session');
+        Session::put('blocked', true);
     }
 
 }
